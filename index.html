@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="Re-Late Nutrición Saludable - PWA para rehabilitación cardíaca">
+    <meta name="theme-color" content="#1a6b4a">
+    <title>Re-Late Nutrición Saludable</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #1a6b4a; --primary-light: #2d8f6b; --primary-dark: #0f4a33;
+            --accent: #e8f5ee; --danger: #d9534f; --warning: #f0ad4e; --success: #5cb85c;
+            --bg: #f5f7f6; --card: #ffffff; --text: #2c3e50; --text-light: #7f8c8d;
+            --border: #e0e6e3; --shadow: 0 2px 8px rgba(0,0,0,0.08); --radius: 12px;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 70px; }
+        .app-header { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 16px 20px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
+        .app-header h1 { font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .app-header .subtitle { font-size: 0.75rem; opacity: 0.85; margin-top: 2px; }
+        .tab-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 100; }
+        .tab-btn { background: none; border: none; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 0.65rem; color: var(--text-light); cursor: pointer; padding: 4px 8px; border-radius: 8px; transition: all 0.2s; }
+        .tab-btn.active { color: var(--primary); background: var(--accent); }
+        .tab-btn .tab-icon { font-size: 1.3rem; }
+        .tab-content { display: none; padding: 16px; max-width: 800px; margin: 0 auto; }
+        .tab-content.active { display: block; }
+        .card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+        .card h3 { font-size: 1rem; margin-bottom: 8px; color: var(--primary-dark); }
+        .search-box { width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: var(--radius); font-size: 1rem; outline: none; transition: border-color 0.2s; }
+        .search-box:focus { border-color: var(--primary); }
+        .food-list { max-height: 300px; overflow-y: auto; margin-top: 8px; }
+        .food-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s; }
+        .food-item:hover { background: var(--accent); }
+        .food-item:last-child { border-bottom: none; }
+        .food-name { font-weight: 500; font-size: 0.9rem; }
+        .food-kcal { font-size: 0.8rem; color: var(--text-light); }
+        .traffic-light { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 6px; }
+        .traffic-green { background: var(--success); } .traffic-yellow { background: var(--warning); } .traffic-red { background: var(--danger); }
+        .btn { padding: 10px 20px; border: none; border-radius: var(--radius); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: var(--primary); color: white; } .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); } .btn-outline:hover { background: var(--accent); }
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; } .btn-danger { background: var(--danger); color: white; }
+        .meal-plate { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 12px; }
+        .plate-item { background: var(--accent); padding: 10px; border-radius: 8px; text-align: center; position: relative; }
+        .plate-item .remove-btn { position: absolute; top: 4px; right: 4px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 0.7rem; cursor: pointer; line-height: 1; }
+        .nutrition-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+        .nutri-box { text-align: center; padding: 10px; background: var(--accent); border-radius: 8px; }
+        .nutri-box .value { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); }
+        .nutri-box .label { font-size: 0.7rem; color: var(--text-light); }
+        .recipe-card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); border-left: 4px solid var(--primary); }
+        .recipe-card h4 { color: var(--primary-dark); margin-bottom: 6px; }
+        .recipe-card .evidence { font-size: 0.75rem; color: var(--text-light); font-style: italic; margin-top: 6px; }
+        .recipe-card .ingredients { font-size: 0.85rem; margin-top: 8px; }
+        .plan-day { background: var(--card); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; box-shadow: var(--shadow); }
+        .plan-day h4 { color: var(--primary); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .plan-meal { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        .plan-meal:last-child { border-bottom: none; }
+        .plan-meal .meal-type { font-weight: 600; color: var(--primary-dark); min-width: 80px; }
+        .challenge-card { background: var(--card); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; }
+        .challenge-card .challenge-info h4 { color: var(--primary-dark); }
+        .challenge-card .challenge-info p { font-size: 0.8rem; color: var(--text-light); }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+        .badge-active { background: var(--accent); color: var(--primary); } .badge-completed { background: #d4edda; color: #155724; }
+        .streak-display { text-align: center; padding: 20px; }
+        .streak-display .streak-number { font-size: 3rem; font-weight: 800; color: var(--primary); }
+        .streak-display .streak-label { font-size: 0.9rem; color: var(--text-light); }
+        .diary-entry { background: var(--card); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; box-shadow: var(--shadow); }
+        .diary-entry .date { font-weight: 600; color: var(--primary); font-size: 0.9rem; }
+        .diary-entry .meals { margin-top: 8px; font-size: 0.85rem; }
+        .profile-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+        .profile-chip { padding: 8px 14px; border-radius: 20px; border: 2px solid var(--border); background: var(--card); cursor: pointer; font-size: 0.8rem; font-weight: 500; transition: all 0.2s; }
+        .profile-chip.active { border-color: var(--primary); background: var(--accent); color: var(--primary-dark); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--card); border-radius: var(--radius); padding: 24px; max-width: 500px; width: 100%; max-height: 80vh; overflow-y: auto; }
+        .modal h3 { margin-bottom: 16px; color: var(--primary-dark); }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 2px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
+        .disclaimer { background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 12px; font-size: 0.75rem; color: #856404; margin-bottom: 16px; }
+        .shopping-list { list-style: none; }
+        .shopping-list li { padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 0.85rem; display: flex; justify-content: space-between; }
+        .shopping-list li:last-child { border-bottom: none; }
+        .section-title { font-size: 1.1rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .empty-state { text-align: center; padding: 30px; color: var(--text-light); }
+        .empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--primary-dark); color: white; padding: 12px 24px; border-radius: 25px; font-size: 0.85rem; z-index: 300; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+        .toast.show { opacity: 1; }
+        .quantity-input { width: 60px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; text-align: center; font-size: 0.85rem; }
+        .weekly-summary { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin: 12px 0; }
+        .day-box { text-align: center; padding: 8px 4px; border-radius: 8px; font-size: 0.7rem; background: var(--accent); }
+        .day-box.has-data { background: var(--primary); color: white; }
+        .day-box .day-name { font-weight: 600; }
+        @media (max-width: 480px) { .nutrition-summary { grid-template-columns: repeat(2, 1fr); } .meal-plate { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <h1>🥗 Re-Late Nutrición Saludable</h1>
+        <div class="subtitle">Tu guía de alimentación para el corazón</div>
+    </header>
+    <main>
+        <!-- TAB: PLATO -->
+        <div id="tab-plato" class="tab-content active">
+            <div class="disclaimer">⚠️ <strong>Aviso:</strong> Esta app es educativa. No sustituye consejo médico profesional.</div>
+            <div class="section-title">👤 Tu Perfil</div>
+            <div class="profile-selector" id="profileSelector"></div>
+            <div class="card">
+                <h3>🍽️ Construir Plato</h3>
+                <input type="text" class="search-box" id="foodSearch" placeholder="Buscar alimento...">
+                <div class="food-list" id="foodList"></div>
+                <div style="margin-top:12px;display:flex;gap:8px;">
+                    <button class="btn btn-primary btn-sm" onclick="openAddFoodModal()">➕ Añadir alimento propio</button>
+                    <button class="btn btn-outline btn-sm" onclick="clearPlate()">🗑️ Vaciar plato</button>
+                </div>
+            </div>
+            <div class="card">
+                <h3>📋 Tu Plato Actual</h3>
+                <div class="meal-plate" id="mealPlate"><div class="empty-state"><div class="empty-icon">🍽️</div><p>Añade alimentos desde la lista</p></div></div>
+                <div class="nutrition-summary" id="nutritionSummary"></div>
+                <div style="margin-top:12px;"><button class="btn btn-primary" onclick="saveMeal()">💾 Guardar en Diario</button></div>
+            </div>
+        </div>
+        <!-- TAB: RECETAS -->
+        <div id="tab-recetas" class="tab-content">
+            <div class="section-title">📷 Recetas con Evidencia</div>
+            <div id="recipesList"></div>
+        </div>
+        <!-- TAB: PLAN -->
+        <div id="tab-plan" class="tab-content">
+            <div class="section-title">📅 Plan Semanal</div>
+            <button class="btn btn-primary" onclick="generateWeeklyPlan()" style="margin-bottom:12px;">✨ Generar Menú Semanal</button>
+            <div id="weeklyPlan"></div>
+            <div class="card" id="shoppingCard" style="display:none;">
+                <h3>🛒 Lista de la Compra</h3>
+                <ul class="shopping-list" id="shoppingList"></ul>
+                <button class="btn btn-outline btn-sm" onclick="copyShoppingList()" style="margin-top:8px;">📋 Copiar Lista</button>
+            </div>
+        </div>
+        <!-- TAB: RETOS -->
+        <div id="tab-retos" class="tab-content">
+            <div class="section-title">🏆 Retos y Rachas</div>
+            <div class="card streak-display"><div class="streak-number" id="streakNumber">0</div><div class="streak-label">días de racha 🔥</div></div>
+            <div id="challengesList"></div>
+        </div>
+        <!-- TAB: DIARIO -->
+        <div id="tab-diario" class="tab-content">
+            <div class="section-title">📊 Diario Nutricional</div>
+            <div class="weekly-summary" id="weeklySummary"></div>
+            <div id="diaryEntries"></div>
+            <button class="btn btn-primary" onclick="generatePDF()" style="margin-top:12px;">📄 Generar Informe PDF</button>
+        </div>
+    </main>
+    <nav class="tab-bar">
+        <button class="tab-btn active" data-tab="plato"><span class="tab-icon">🍽️</span>Plato</button>
+        <button class="tab-btn" data-tab="recetas"><span class="tab-icon">📷</span>Recetas</button>
+        <button class="tab-btn" data-tab="plan"><span class="tab-icon">📅</span>Plan</button>
+        <button class="tab-btn" data-tab="retos"><span class="tab-icon">🏆</span>Retos</button>
+        <button class="tab-btn" data-tab="diario"><span class="tab-icon">📊</span>Diario</button>
+    </nav>
+    <!-- MODALS -->
+    <div class="modal-overlay" id="addFoodModal"><div class="modal"><h3>➕ Añadir Alimento Propio</h3><div class="form-group"><label>Nombre</label><input type="text" id="newFoodName"></div><div class="form-group"><label>Kcal/100g</label><input type="number" id="newFoodKcal"></div><div class="form-group"><label>Proteínas (g/100g)</label><input type="number" id="newFoodProtein" step="0.1"></div><div class="form-group"><label>Carbohidratos (g/100g)</label><input type="number" id="newFoodCarbs" step="0.1"></div><div class="form-group"><label>Grasas (g/100g)</label><input type="number" id="newFoodFat" step="0.1"></div><div class="form-group"><label>Sodio (mg/100g)</label><input type="number" id="newFoodSodium"></div><div style="display:flex;gap:8px;margin-top:16px;"><button class="btn btn-primary" onclick="saveCustomFood()">💾 Guardar</button><button class="btn btn-outline" onclick="closeModal('addFoodModal')">Cancelar</button></div></div></div>
+    <div class="toast" id="toast"></div>
+	    <script>
+    // ==================== BASE DE DATOS DE ALIMENTOS ====================
+    const FOODS_DB = [
+        // Cereales y derivados
+        {id:'c1',name:'Pan integral',kcal:247,protein:13,carbs:41,fat:3.4,sodium:490,category:'cereal'},
+        {id:'c2',name:'Arroz integral',kcal:346,protein:7.3,carbs:77,fat:2.7,sodium:5,category:'cereal'},
+        {id:'c3',name:'Pasta integral',kcal:333,protein:12,carbs:71,fat:2.5,sodium:6,category:'cereal'},
+        {id:'c4',name:'Avena',kcal:389,protein:16.9,carbs:66,fat:6.9,sodium:2,category:'cereal'},
+        {id:'c5',name:'Quinoa',kcal:368,protein:14,carbs:64,fat:6,sodium:7,category:'cereal'},
+        {id:'c6',name:'Pan blanco',kcal:265,protein:9,carbs:54,fat:3.2,sodium:490,category:'cereal'},
+        // Verduras
+        {id:'v1',name:'Tomate',kcal:18,protein:0.9,carbs:3.9,fat:0.2,sodium:5,category:'verdura'},
+        {id:'v2',name:'Lechuga',kcal:15,protein:1.4,carbs:2.9,fat:0.2,sodium:28,category:'verdura'},
+        {id:'v3',name:'Espinacas',kcal:23,protein:2.9,carbs:3.6,fat:0.4,sodium:79,category:'verdura'},
+        {id:'v4',name:'Brócoli',kcal:34,protein:2.8,carbs:7,fat:0.4,sodium:33,category:'verdura'},
+        {id:'v5',name:'Calabacín',kcal:17,protein:1.2,carbs:3.1,fat:0.3,sodium:8,category:'verdura'},
+        {id:'v6',name:'Zanahoria',kcal:41,protein:0.9,carbs:10,fat:0.2,sodium:69,category:'verdura'},
+        {id:'v7',name:'Pimiento rojo',kcal:31,protein:1,carbs:6,fat:0.3,sodium:4,category:'verdura'},
+        {id:'v8',name:'Cebolla',kcal:40,protein:1.1,carbs:9.3,fat:0.1,sodium:4,category:'verdura'},
+        {id:'v9',name:'Judías verdes',kcal:31,protein:1.8,carbs:7,fat:0.2,sodium:6,category:'verdura'},
+        // Frutas
+        {id:'f1',name:'Manzana',kcal:52,protein:0.3,carbs:14,fat:0.2,sodium:1,category:'fruta'},
+        {id:'f2',name:'Plátano',kcal:89,protein:1.1,carbs:23,fat:0.3,sodium:1,category:'fruta'},
+        {id:'f3',name:'Naranja',kcal:47,protein:0.9,carbs:12,fat:0.1,sodium:0,category:'fruta'},
+        {id:'f4',name:'Fresa',kcal:32,protein:0.7,carbs:7.7,fat:0.3,sodium:1,category:'fruta'},
+        {id:'f5',name:'Arándano',kcal:57,protein:0.7,carbs:14,fat:0.3,sodium:1,category:'fruta'},
+        {id:'f6',name:'Kiwi',kcal:61,protein:1.1,carbs:15,fat:0.5,sodium:3,category:'fruta'},
+        {id:'f7',name:'Uva',kcal:69,protein:0.7,carbs:18,fat:0.2,sodium:2,category:'fruta'},
+        // Legumbres
+        {id:'l1',name:'Lentejas',kcal:353,protein:25.8,carbs:60,fat:1.1,sodium:2,category:'legumbre'},
+        {id:'l2',name:'Garbanzos',kcal:364,protein:19,carbs:61,fat:6,sodium:24,category:'legumbre'},
+        {id:'l3',name:'Alubias blancas',kcal:333,protein:23,carbs:60,fat:1,fat:1.5,sodium:2,category:'legumbre'},
+        {id:'l4',name:'Soja',kcal:446,protein:36,carbs:30,fat:20,sodium:2,category:'legumbre'},
+        // Pescados
+        {id:'p1',name:'Salmón',kcal:208,protein:20,carbs:0,fat:13,sodium:59,category:'pescado'},
+        {id:'p2',name:'Atún fresco',kcal:132,protein:29,carbs:0,fat:1,sodium:50,category:'pescado'},
+        {id:'p3',name:'Merluza',kcal:81,protein:17,carbs:0,fat:1,sodium:53,category:'pescado'},
+        {id:'p4',name:'Sardina',kcal:208,protein:25,carbs:0,fat:11,sodium:307,category:'pescado'},
+        {id:'p5',name:'Bacalao',kcal:82,protein:18,carbs:0,fat:0.7,sodium:70,category:'pescado'},
+        {id:'p6',name:'Trucha',kcal:119,protein:20,carbs:0,fat:4.3,sodium:50,category:'pescado'},
+        // Carnes
+        {id:'m1',name:'Pechuga de pollo',kcal:165,protein:31,carbs:0,fat:3.6,sodium:74,category:'carne'},
+        {id:'m2',name:'Ternera magra',kcal:158,protein:26,carbs:0,fat:5,sodium:53,category:'carne'},
+        {id:'m3',name:'Cerdo magro',kcal:143,protein:21,carbs:0,fat:6,sodium:62,category:'carne'},
+        {id:'m4',name:'Pavo',kcal:189,protein:29,carbs:0,fat:7,sodium:48,category:'carne'},
+        // Lácteos y huevos
+        {id:'d1',name:'Leche desnatada',kcal:34,protein:3.4,carbs:5,fat:0.1,sodium:44,category:'lacteo'},
+        {id:'d2',name:'Yogur natural',kcal:61,protein:3.5,carbs:4.7,fat:3.3,sodium:46,category:'lacteo'},
+        {id:'d3',name:'Queso fresco',kcal:174,protein:14,carbs:3,fat:11,sodium:350,category:'lacteo'},
+        {id:'d4',name:'Huevo entero',kcal:155,protein:13,carbs:1.1,fat:11,sodium:142,category:'lacteo'},
+        {id:'d5',name:'Clara de huevo',kcal:52,protein:11,carbs:0.7,fat:0.2,sodium:166,category:'lacteo'},
+        // Grasas y frutos secos
+        {id:'g1',name:'Aceite de oliva',kcal:884,protein:0,carbs:0,fat:100,sodium:2,category:'grasa'},
+        {id:'g2',name:'Nueces',kcal:654,protein:15,carbs:14,fat:65,sodium:2,category:'grasa'},
+        {id:'g3',name:'Almendras',kcal:579,protein:21,carbs:22,fat:50,sodium:1,category:'grasa'},
+        {id:'g4',name:'Aguacate',kcal:160,protein:2,carbs:9,fat:15,sodium:7,category:'grasa'},
+        // Bebidas
+        {id:'b1',name:'Agua',kcal:0,protein:0,carbs:0,fat:0,sodium:4,category:'bebida'},
+        {id:'b2',name:'Café solo',kcal:2,protein:0.1,carbs:0,fat:0,sodium:5,category:'bebida'},
+        {id:'b3',name:'Té verde',kcal:1,protein:0,carbs:0,fat:0,sodium:2,category:'bebida'},
+        // Postres
+        {id:'t1',name:'Chocolate negro 85%',kcal:546,protein:8,carbs:46,fat:31,sodium:20,category:'postre'},
+        {id:'t2',name:'Helado vainilla',kcal:127,protein:3.5,carbs:21,fat:4,sodium:53,category:'postre'},
+    ];
+
+    // ==================== RECETAS ====================
+    const RECIPES = [
+        {name:'Ensalada Mediterránea',ingredients:['Tomate','Lechuga','Pimiento rojo','Cebolla','Aceite de oliva'],evidence:'PREDIMED: AOVE y verduras reducen riesgo CV en 30%',steps:'Mezclar verduras, aliñar con AOVE. Añadir atún si se desea.'},
+        {name:'Salmón con Quinoa',ingredients:['Salmón','Quinoa','Brócoli','Aceite de oliva'],evidence:'AHA: Omega-3 de pescado azul protege el corazón',steps:'Hornear salmón 15min. Cocer quinoa. Saltear brócoli con AOVE.'},
+        {name:'Lentejas con Verduras',ingredients:['Lentejas','Zanahoria','Cebolla','Pimiento rojo','Aceite de oliva'],evidence:'EFSA: Legumbres mejoran perfil lipídico',steps:'Cocer lentejas con verduras. Aliñar con AOVE y limón.'},
+        {name:'Tostada Integral con Aguacate',ingredients:['Pan integral','Aguacate','Huevo','Tomate'],evidence:'PREDIMED: Grasas monoinsaturadas saludables',steps:'Tostar pan, machacar aguacate, añadir huevo cocido y tomate.'},
+        {name:'Bowl de Pollo y Arroz',ingredients:['Pechuga de pollo','Arroz integral','Espinacas','Aceite de oliva'],evidence:'AHA: Proteína magra + cereal integral = saciedad',steps:'Cocer arroz. Saltear pollo y espinacas. Mezclar todo.'},
+    ];
+
+    // ==================== ESTADO Y ALMACENAMIENTO ====================
+    const STORAGE_KEYS = { PROFILE:'re-late-profile', PLATE:'re-late-plate', DIARY:'re-late-diary', STREAK:'re-late-streak', CHALLENGES:'re-late-challenges', CUSTOM_FOODS:'re-late-custom-foods' };
+    
+    function getStorage(key) { try { return JSON.parse(localStorage.getItem(key)) || null; } catch(e) { return null; } }
+    function setStorage(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+
+    let currentProfile = getStorage(STORAGE_KEYS.PROFILE) || 'cardiaco';
+    let currentPlate = getStorage(STORAGE_KEYS.PLATE) || [];
+    let customFoods = getStorage(STORAGE_KEYS.CUSTOM_FOODS) || [];
+
+    // ==================== PERFILES Y SEMÁFORO ====================
+    const PROFILES = {
+        cardiaco: { sodiumMax: 1500, fatMax: 30, satFatMax: 7, label: '❤️ Cardíaco' },
+        hipertenso: { sodiumMax: 1000, fatMax: 35, satFatMax: 10, label: '🩺 Hipertenso' },
+        dislipemia: { sodiumMax: 2000, fatMax: 25, satFatMax: 5, label: '📉 Dislipemia' },
+        diabetes1: { sodiumMax: 2000, fatMax: 35, satFatMax: 10, label: '💉 Diabetes T1' },
+        diabetes2: { sodiumMax: 2000, fatMax: 30, satFatMax: 7, label: '🩸 Diabetes T2' }
+    };
+
+    function getTrafficLight(food, grams) {
+        const p = PROFILES[currentProfile];
+        const factor = grams / 100;
+        const sodium = food.sodium * factor;
+        const fat = food.fat * factor;
+        if (sodium > p.sodiumMax * 0.15 || fat > p.fatMax * 0.15) return 'red';
+        if (sodium > p.sodiumMax * 0.08 || fat > p.fatMax * 0.08) return 'yellow';
+        return 'green';
+    }
+
+    // ==================== RENDERIZADO ====================
+    function renderProfiles() {
+        const el = document.getElementById('profileSelector');
+        el.innerHTML = Object.entries(PROFILES).map(([key, val]) => 
+            `<div class="profile-chip ${key===currentProfile?'active':''}" onclick="setProfile('${key}')">${val.label}</div>`
+        ).join('');
+    }
+
+    function setProfile(p) { currentProfile = p; setStorage(STORAGE_KEYS.PROFILE, p); renderProfiles(); renderFoodList(); showToast('Perfil actualizado'); }
+
+    function renderFoodList(filter = '') {
+        const allFoods = [...FOODS_DB, ...customFoods];
+        const filtered = allFoods.filter(f => f.name.toLowerCase().includes(filter.toLowerCase()));
+        const el = document.getElementById('foodList');
+        el.innerHTML = filtered.map(f => {
+            const light = getTrafficLight(f, 100);
+            return `<div class="food-item" onclick="addToPlate('${f.id}')">
+                <span><span class="traffic-light traffic-${light}"></span><span class="food-name">${f.name}</span></span>
+                <span class="food-kcal">${f.kcal} kcal/100g</span>
+            </div>`;
+        }).join('') || '<div class="empty-state"><div class="empty-icon">🔍</div><p>No se encontraron alimentos</p></div>';
+    }
+
+    function addToPlate(foodId) {
+        const allFoods = [...FOODS_DB, ...customFoods];
+        const food = allFoods.find(f => f.id === foodId);
+        if (!food) return;
+        currentPlate.push({ ...food, grams: 100 });
+        setStorage(STORAGE_KEYS.PLATE, currentPlate);
+        renderPlate();
+        showToast(`${food.name} añadido`);
+    }
+
+    function removeFromPlate(index) {
+        currentPlate.splice(index, 1);
+        setStorage(STORAGE_KEYS.PLATE, currentPlate);
+        renderPlate();
+    }
+
+    function updateGrams(index, grams) {
+        currentPlate[index].grams = parseFloat(grams) || 0;
+        setStorage(STORAGE_KEYS.PLATE, currentPlate);
+        renderPlate();
+    }
+
+    function clearPlate() { currentPlate = []; setStorage(STORAGE_KEYS.PLATE, currentPlate); renderPlate(); showToast('Plato vaciado'); }
+
+    function renderPlate() {
+        const plateEl = document.getElementById('mealPlate');
+        const summaryEl = document.getElementById('nutritionSummary');
+        if (currentPlate.length === 0) {
+            plateEl.innerHTML = '<div class="empty-state"><div class="empty-icon">🍽️</div><p>Añade alimentos desde la lista</p></div>';
+            summaryEl.innerHTML = '';
+            return;
+        }
+        plateEl.innerHTML = currentPlate.map((item, i) => {
+            const light = getTrafficLight(item, item.grams);
+            return `<div class="plate-item">
+                <button class="remove-btn" onclick="removeFromPlate(${i})">✕</button>
+                <div style="font-size:0.8rem;font-weight:600;">${item.name}</div>
+                <span class="traffic-light traffic-${light}" style="margin:4px 0;"></span>
+                <input type="number" class="quantity-input" value="${item.grams}" onchange="updateGrams(${i}, this.value)" min="1">
+                <div style="font-size:0.7rem;color:var(--text-light);">${Math.round(item.kcal * item.grams / 100)} kcal</div>
+            </div>`;
+        }).join('');
+        const totals = currentPlate.reduce((acc, item) => {
+            const f = item.grams / 100;
+            acc.kcal += item.kcal * f; acc.protein += item.protein * f; acc.carbs += item.carbs * f; acc.fat += item.fat * f; acc.sodium += item.sodium * f;
+            return acc;
+        }, {kcal:0,protein:0,carbs:0,fat:0,sodium:0});
+        summaryEl.innerHTML = `
+            <div class="nutri-box"><div class="value">${Math.round(totals.kcal)}</div><div class="label">Kcal</div></div>
+            <div class="nutri-box"><div class="value">${Math.round(totals.protein)}g</div><div class="label">Proteínas</div></div>
+            <div class="nutri-box"><div class="value">${Math.round(totals.carbs)}g</div><div class="label">Carbos</div></div>
+            <div class="nutri-box"><div class="value">${Math.round(totals.fat)}g</div><div class="label">Grasas</div></div>
+            <div class="nutri-box"><div class="value">${Math.round(totals.sodium)}mg</div><div class="label">Sodio</div></div>
+        `;
+    }
+
+    function saveMeal() {
+        if (currentPlate.length === 0) { showToast('El plato está vacío'); return; }
+        const diary = getStorage(STORAGE_KEYS.DIARY) || [];
+        const now = new Date();
+        const entry = {
+            date: now.toISOString(),
+            meals: currentPlate.map(p => ({ name: p.name, grams: p.grams, kcal: Math.round(p.kcal * p.grams / 100) })),
+            totalKcal: Math.round(currentPlate.reduce((s, p) => s + p.kcal * p.grams / 100, 0)),
+            profile: currentProfile
+        };
+        diary.unshift(entry);
+        setStorage(STORAGE_KEYS.DIARY, diary);
+        updateStreak();
+        clearPlate();
+        showToast('💾 Guardado en Diario');
+    }
+
+    // ==================== RECETAS ====================
+    function renderRecipes() {
+        document.getElementById('recipesList').innerHTML = RECIPES.map(r => `
+            <div class="recipe-card">
+                <h4>🍴 ${r.name}</h4>
+                <div class="ingredients"><strong>Ingredientes:</strong> ${r.ingredients.join(', ')}</div>
+                <div style="font-size:0.85rem;margin-top:6px;">${r.steps}</div>
+                <div class="evidence">📚 ${r.evidence}</div>
+            </div>
+        `).join('');
+    }
+
+    // ==================== PLAN SEMANAL ====================
+    function generateWeeklyPlan() {
+        const days = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+        const meals = ['Desayuno','Comida','Cena'];
+        const allFoods = [...FOODS_DB, ...customFoods];
+        const plan = days.map(day => ({
+            day,
+            meals: meals.map(m => {
+                const randomFoods = allFoods.sort(() => Math.random() - 0.5).slice(0, 3);
+                return { type: m, foods: randomFoods.map(f => `${f.name} (${Math.round(f.kcal * 0.5)} kcal)`) };
+            })
+        }));
+        document.getElementById('weeklyPlan').innerHTML = plan.map(d => `
+            <div class="plan-day">
+                <h4>${d.day} <button class="btn btn-outline btn-sm" onclick="regenerateDay('${d.day}')">🔄</button></h4>
+                ${d.meals.map(m => `<div class="plan-meal"><span class="meal-type">${m.type}</span><span>${m.foods.join(', ')}</span></div>`).join('')}
+            </div>
+        `).join('');
+        // Shopping list
+        const shopping = {};
+        plan.forEach(d => d.meals.forEach(m => m.foods.forEach(f => {
+            const name = f.split(' (')[0];
+            shopping[name] = (shopping[name] || 0) + 1;
+        })));
+        document.getElementById('shoppingCard').style.display = 'block';
+        document.getElementById('shoppingList').innerHTML = Object.entries(shopping).map(([name, qty]) => 
+            `<li><span>${name}</span><span>×${qty}</span></li>`
+        ).join('');
+        showToast('✅ Plan generado');
+    }
+
+    function regenerateDay(day) { generateWeeklyPlan(); }
+
+    function copyShoppingList() {
+        const items = [...document.querySelectorAll('#shoppingList li')].map(li => li.textContent.trim());
+        navigator.clipboard.writeText(items.join('\n')).then(() => showToast('📋 Lista copiada'));
+    }
+
+    // ==================== RETOS Y RACHAS ====================
+    function updateStreak() {
+        const streak = getStorage(STORAGE_KEYS.STREAK) || { count: 0, lastDate: null };
+        const today = new Date().toDateString();
+        if (streak.lastDate !== today) {
+            const yesterday = new Date(Date.now() - 86400000).toDateString();
+            if (streak.lastDate === yesterday) { streak.count++; } 
+            else if (streak.lastDate !== today) { streak.count = 1; }
+            streak.lastDate = today;
+            setStorage(STORAGE_KEYS.STREAK, streak);
+        }
+        renderStreak();
+    }
+
+    function renderStreak() {
+        const streak = getStorage(STORAGE_KEYS.STREAK) || { count: 0 };
+        document.getElementById('streakNumber').textContent = streak.count;
+    }
+
+    function renderChallenges() {
+        const challenges = [
+            { name: '7 días sin azúcar', desc: 'Evitar azúcares añadidos durante una semana', completed: false },
+            { name: '5 al día', desc: 'Consumir 5 raciones de frutas/verduras', completed: true },
+            { name: 'Hidratación', desc: 'Beber 2L de agua diarios', completed: false },
+            { name: 'Cena ligera', desc: 'Cenar antes de las 21h', completed: true },
+        ];
+        document.getElementById('challengesList').innerHTML = challenges.map(c => `
+            <div class="challenge-card">
+                <div class="challenge-info"><h4>${c.name}</h4><p>${c.desc}</p></div>
+                <span class="badge ${c.completed ? 'badge-completed' : 'badge-active'}">${c.completed ? '✅ Completado' : '🔄 En curso'}</span>
+            </div>
+        `).join('');
+    }
+
+    // ==================== DIARIO ====================
+    function renderDiary() {
+        const diary = getStorage(STORAGE_KEYS.DIARY) || [];
+        const weekDays = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+        const today = new Date();
+        document.getElementById('weeklySummary').innerHTML = weekDays.map((d, i) => {
+            const date = new Date(today); date.setDate(today.getDate() - (6 - i));
+            const hasData = diary.some(e => new Date(e.date).toDateString() === date.toDateString());
+            return `<div class="day-box ${hasData ? 'has-data' : ''}"><div class="day-name">${d}</div></div>`;
+        }).join('');
+        if (diary.length === 0) {
+            document.getElementById('diaryEntries').innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><p>Sin registros aún</p></div>';
+            return;
+        }
+        document.getElementById('diaryEntries').innerHTML = diary.slice(0, 10).map(e => {
+            const d = new Date(e.date);
+            return `<div class="diary-entry"><div class="date">${d.toLocaleDateString('es-ES', {weekday:'long', day:'numeric', month:'long'})}</div>
+                <div class="meals">${e.meals.map(m => `• ${m.name} (${m.grams}g, ${m.kcal}kcal)`).join('<br>')}</div>
+                <div style="font-size:0.8rem;color:var(--text-light);margin-top:4px;">Total: ${e.totalKcal} kcal | Perfil: ${PROFILES[e.profile]?.label || e.profile}</div>
+            </div>`;
+        }).join('');
+    }
+
+    function generatePDF() {
+        const diary = getStorage(STORAGE_KEYS.DIARY) || [];
+        if (diary.length === 0) { showToast('No hay datos para el informe'); return; }
+        let html = `<h1>Informe Nutricional - Re-Late</h1><p>Fecha: ${new Date().toLocaleDateString('es-ES')}</p><p>Paciente (perfil): ${PROFILES[currentProfile]?.label}</p><hr>`;
+        diary.forEach(e => {
+            const d = new Date(e.date);
+            html += `<h3>${d.toLocaleDateString('es-ES')}</h3><table border="1" cellpadding="5" style="border-collapse:collapse;width:100%;">
+                <tr><th>Alimento</th><th>Gramos</th><th>Kcal</th></tr>`;
+            e.meals.forEach(m => { html += `<tr><td>${m.name}</td><td>${m.grams}g</td><td>${m.kcal}</td></tr>`; });
+            html += `<tr><td colspan="2"><strong>Total</strong></td><td><strong>${e.totalKcal} kcal</strong></td></tr></table><br>`;
+        });
+        const win = window.open('', '_blank');
+        win.document.write(html);
+        win.document.close();
+        win.print();
+    }
+
+    // ==================== MODAL ALIMENTO PROPIO ====================
+    function openAddFoodModal() { document.getElementById('addFoodModal').classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    function saveCustomFood() {
+        const name = document.getElementById('newFoodName').value.trim();
+        const kcal = parseFloat(document.getElementById('newFoodKcal').value) || 0;
+        const protein = parseFloat(document.getElementById('newFoodProtein').value) || 0;
+        const carbs = parseFloat(document.getElementById('newFoodCarbs').value) || 0;
+        const fat = parseFloat(document.getElementById('newFoodFat').value) || 0;
+        const sodium = parseFloat(document.getElementById('newFoodSodium').value) || 0;
+        if (!name) { showToast('⚠️ Nombre obligatorio'); return; }
+        const newFood = { id: 'custom_' + Date.now(), name, kcal, protein, carbs, fat, sodium, category: 'custom' };
+        customFoods.push(newFood);
+        setStorage(STORAGE_KEYS.CUSTOM_FOODS, customFoods);
+        closeModal('addFoodModal');
+        renderFoodList(document.getElementById('foodSearch').value);
+        showToast(`✅ ${name} añadido`);
+        // Clear form
+        ['newFoodName','newFoodKcal','newFoodProtein','newFoodCarbs','newFoodFat','newFoodSodium'].forEach(id => document.getElementById(id).value = '');
+    }
+
+    // ==================== TOAST ====================
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    // ==================== TABS ====================
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        });
+    });
+
+    // ==================== SEARCH ====================
+    document.getElementById('foodSearch').addEventListener('input', (e) => renderFoodList(e.target.value));
+
+    // ==================== INIT ====================
+    function init() {
+        renderProfiles();
+        renderFoodList();
+        renderPlate();
+        renderRecipes();
+        renderChallenges();
+        renderStreak();
+        renderDiary();
+        updateStreak();
+    }
+
+    init();
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./service-worker.js').then(() => console.log('SW registered')).catch(e => console.log('SW error', e));
+    }
+    </script>
+</body>
+</html>

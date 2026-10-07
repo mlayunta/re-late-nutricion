@@ -93,6 +93,15 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 .recipe-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
 .recipe-card h4{color:var(--primary-dark);font-size:.95rem}
 .recipe-card p{font-size:.8rem;color:var(--text-light);margin-top:4px}
+/* ---- Recetario cardiosaludable ---- */
+.rc-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:8px}
+.rc-head h4{display:flex;align-items:center;gap:6px}
+.rc-meta{font-size:.72rem;color:var(--text-light);white-space:nowrap;background:var(--accent);padding:3px 8px;border-radius:10px}
+.rc-tip{font-size:.78rem;color:var(--primary);margin-top:4px}
+.rc-body{display:none;margin-top:10px;font-size:.82rem;line-height:1.5;border-top:1px dashed var(--border);padding-top:8px}
+.recipe-card.open .rc-body{display:block}
+.rc-body ul,.rc-body ol{margin:4px 0 10px 18px}
+.rc-body li{margin-bottom:2px}
 .toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:var(--primary-dark);color:#fff;padding:10px 18px;border-radius:24px;font-size:.85rem;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
 .muted{font-size:.78rem;color:var(--text-light)}
@@ -240,7 +249,9 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 <!-- ===================== RECETAS ===================== -->
 <section class="tab-content" id="tab-recipes">
 <div class="card">
-<h3>📖 Recetas cardiosaludables</h3>
+<h3>📖 Recetario cardiosaludable</h3>
+<p class="muted">21 recetas de dieta mediterránea para rehabilitación cardíaca. Toca una receta para ver ingredientes y elaboración.</p>
+<div class="cat-chips" id="recipeChips"></div>
 <div id="recipeList"></div>
 </div>
 </section>
@@ -394,11 +405,97 @@ const PREPARED = [
 ];
 
 const RECIPES = [
- {t:'Salmón al horno con limón',d:'Salmón 120g, limón, ajo, perejil, 1 cda aceite de oliva. Horno 180°C 15 min. Rico en omega-3.'},
- {t:'Bowl de quinoa y verduras',d:'Quinoa 60g, brócoli, zanahoria, garbanzos 80g, aceite de oliva. Equilibrio perfecto.'},
- {t:'Crema de calabacín',d:'Calabacín 200g, puerro, caldo de verduras, 1 cda aceite de oliva. Sin nata, baja en sodio.'},
- {t:'Pollo mediterráneo',d:'Pechuga 120g, tomate cherry, pimiento, cebolla, hierbas. A la plancha con poco aceite.'},
- {t:'Porridge de avena y frutos rojos',d:'Avena 40g, leche desnatada 200ml, arándanos 50g. Fibra y antioxidantes.'},
+ // ---------- DESAYUNOS ----------
+ {cat:'Desayuno', t:'Porridge de avena y frutos rojos', k:320, light:'green',
+  ing:['Avena 40 g','Leche desnatada o bebida vegetal 200 ml','Arándanos 50 g','Nueces picadas 10 g','Canela al gusto'],
+  steps:['Calienta la leche con la avena 5-8 min removiendo.','Añade los frutos rojos y la canela.','Remata con las nueces picadas.'],
+  tip:'Fibra soluble (beta-glucanos) que ayuda a reducir el colesterol LDL.'},
+ {cat:'Desayuno', t:'Tostada integral de aguacate y huevo', k:290, light:'green',
+  ing:['Pan integral 40 g (1 rebanada)','Aguacate 50 g','Huevo 1 ud','Tomate cherry 2 uds','Aceite de oliva 3 ml'],
+  steps:['Tuesta el pan y pisa el aguacate con unas gotas de limón.','Cocina el huevo a la plancha sin grasa o duro.','Sirve con los cherries y un hilo de AOVE.'],
+  tip:'Grasa monoinsaturada del aguacate + proteína del huevo: saciedad estable.'},
+ {cat:'Desayuno', t:'Yogur natural con chía y manzana', k:210, light:'green',
+  ing:['Yogur natural 125 g','Semillas de chía 8 g','Manzana 100 g','Canela'],
+  steps:['Remoja la chía en el yogur 10 min.','Añade la manzana en dados y la canela.'],
+  tip:'Omega-3 vegetal (ALA) y probióticos; ideal para el control glucémico.'},
+ {cat:'Desayuno', t:'Batido verde de kiwi y espinacas', k:180, light:'green',
+  ing:['Kiwi 1 ud','Espinacas frescas 30 g','Leche desnatada 150 ml','Avena 15 g'],
+  steps:['Tritura todo hasta obtener textura homogénea.','Toma sin colar para conservar la fibra.'],
+  tip:'Potasio y folatos: útiles en hipertensión (recomendado AHA).'},
+ {cat:'Desayuno', t:'Tortilla de claras con verduras', k:160, light:'green',
+  ing:['Claras de huevo 150 g','Calabacín 80 g','Cebolla 30 g','Pimiento 30 g','AOVE 3 ml'],
+  steps:['Saltea las verduras con el AOVE.','Cuaja las claras a fuego suave.'],
+  tip:'Alta proteína y baja grasa saturada: perfecta si hay dislipidemia.'},
+
+ // ---------- COMIDAS ----------
+ {cat:'Comida', t:'Salmón al horno con quinoa', k:480, light:'green',
+  ing:['Salmón 120 g','Quinoa cocida 150 g','Brócoli 100 g','AOVE 7 ml','Limón y ajo'],
+  steps:['Hornea el salmón con limón y ajo a 180°C, 15 min.','Cocina la quinoa y saltea el brócoli al vapor.','Emplata con un hilo de AOVE en crudo.'],
+  tip:'Omega-3 EPA/DHA: reduce triglicéridos y riesgo cardiovascular (AHA).'},
+ {cat:'Comida', t:'Lentejas estofadas con verduras', k:420, light:'green',
+  ing:['Lentejas cocidas 200 g','Zanahoria 80 g','Pimiento 60 g','Cebolla 50 g','AOVE 7 ml','Laurel, pimentón'],
+  steps:['Sofríe las verduras con AOVE.','Añade lentejas, agua o caldo bajo en sodio y cocina 15 min.'],
+  tip:'Legumbre: fibra + proteína vegetal, baja en grasa saturada (PREDIMED).'},
+ {cat:'Comida', t:'Pollo mediterráneo con arroz integral', k:460, light:'green',
+  ing:['Pechuga de pollo 130 g','Arroz integral cocido 150 g','Tomate 100 g','Pimiento 80 g','Cebolla 40 g','AOVE 7 ml'],
+  steps:['Marca el pollo a la plancha.','Saltea las verduras y cocina todo junto 10 min.','Sirve sobre el arroz integral.'],
+  tip:'Proteína magra + cereal integral: control de peso y glucemia.'},
+ {cat:'Comida', t:'Bowl de garbanzos, atún y hortalizas', k:440, light:'green',
+  ing:['Garbanzos cocidos 150 g','Atún al natural 100 g','Tomate 100 g','Pepino 80 g','Cebolla morada 30 g','AOVE 7 ml'],
+  steps:['Mezcla los garbanzos con las hortalizas en dados.','Añade el atún escurrido y aliña con AOVE y limón.'],
+  tip:'Comida completa en un bol: omega-3, fibra y potasio, sin cocción.'},
+ {cat:'Comida', t:'Pasta integral con pisto y pollo', k:470, light:'yellow',
+  ing:['Pasta integral cocida 180 g','Calabacín 100 g','Tomate 100 g','Pimiento 60 g','Pollo 80 g','AOVE 7 ml'],
+  steps:['Haz el pisto salteando las verduras con AOVE.','Mezcla con la pasta y el pollo desmenuzado.'],
+  tip:'Integral de bajo IG; vigila la ración si hay diabetes tipo 2.'},
+ {cat:'Comida', t:'Merluza al vapor con patata y espárragos', k:360, light:'green',
+  ing:['Merluza 140 g','Patata cocida 150 g','Espárragos 100 g','AOVE 5 ml','Perejil, limón'],
+  steps:['Cocina la merluza y los espárragos al vapor 8-10 min.','Sirve con la patata y un chorrito de AOVE y limón.'],
+  tip:'Pescado blanco magro: muy bajo en grasa saturada y sodio.'},
+
+ // ---------- CENAS ----------
+ {cat:'Cena', t:'Crema de calabacín y puerro', k:220, light:'green',
+  ing:['Calabacín 250 g','Puerro 80 g','Queso fresco 30 g','Caldo de verduras bajo en sodio 200 ml','AOVE 5 ml'],
+  steps:['Pocha el puerro, añade el calabacín y el caldo.','Tritura e incorpora el queso fresco al final.'],
+  tip:'Sin nata y baja en sal: ligera y saciante para la noche.'},
+ {cat:'Cena', t:'Ensalada templada de tofu y verduras', k:300, light:'green',
+  ing:['Tofu 120 g','Lechuga 60 g','Tomate 100 g','Pimiento asado 60 g','Semillas de chía 8 g','AOVE 5 ml'],
+  steps:['Marca el tofu a la plancha en dados.','Monta la ensalada y aliña con AOVE y limón.'],
+  tip:'Proteína vegetal sin colesterol: alternativa cardiosaludable a la carne.'},
+ {cat:'Cena', t:'Pescado blanco al horno con pimientos', k:290, light:'green',
+  ing:['Bacalao fresco 140 g','Pimiento rojo 100 g','Cebolla 50 g','AOVE 5 ml','Ajo, perejil'],
+  steps:['Asa los pimientos y la cebolla 15 min a 180°C.','Añade el bacalao y hornea 8-10 min más.'],
+  tip:'Bacalao: magro, con potasio y yodo; evita la versión en salazón (sodio).'},
+ {cat:'Cena', t:'Tortilla francesa de champiñones y espinacas', k:240, light:'yellow',
+  ing:['Huevo 1 ud + clara 1 ud','Champiñones 80 g','Espinacas 60 g','AOVE 4 ml'],
+  steps:['Saltea champiñones y espinacas.','Cuaja la tortilla a fuego suave.'],
+  tip:'Cena proteica ligera; la clara extra sube proteína sin grasa saturada.'},
+ {cat:'Cena', t:'Pavo a la plancha con ensalada mediterránea', k:310, light:'green',
+  ing:['Pavo 120 g','Tomate 100 g','Pepino 60 g','Queso fresco 20 g','Aceitunas 15 g','AOVE 5 ml'],
+  steps:['Plancha el pavo con hierbas provenzales.','Prepara la ensalada y aliña con AOVE.'],
+  tip:'Aceitunas y AOVE: polifenoles y grasas del Mediterráneo (PREDIMED).'},
+
+ // ---------- SNACKS / MERIENDAS ----------
+ {cat:'Snack', t:'Manzana con nueces', k:180, light:'green',
+  ing:['Manzana 150 g','Nueces 15 g'],
+  steps:['Lava y corta la manzana en rodajas.','Sirve con las nueces.'],
+  tip:'Snack saciante: fibra + omega-3 vegetal; mejor que bollería.'},
+ {cat:'Snack', t:'Yogur con arándanos y avena', k:160, light:'green',
+  ing:['Yogur natural 125 g','Arándanos 50 g','Avena 10 g'],
+  steps:['Mezcla todos los ingredientes.'],
+  tip:'Antioxidantes (antocianinas) y probióticos sin azúcares añadidos.'},
+ {cat:'Snack', t:'Palitos de verduras con hummus', k:150, light:'green',
+  ing:['Zanahoria 80 g','Pepino 60 g','Hummus casero 40 g'],
+  steps:['Corta las verduras en bastones.','Sirve con hummus (garbanzo, sésamo, AOVE).'],
+  tip:'Sustituye chips y patés: crujiente, fibra y grasa cardiosaludable.'},
+ {cat:'Snack', t:'Tostada de pan integral con tomate', k:120, light:'yellow',
+  ing:['Pan integral 30 g','Tomate 60 g','AOVE 3 ml'],
+  steps:['Tuesta el pan, frota tomate y añade un hilo de AOVE.'],
+  tip:'Pan con aceite a la manera mediterránea; vigila la ración de pan.'},
+ {cat:'Snack', t:'Batido de fresas y plátano', k:140, light:'green',
+  ing:['Fresas 100 g','Plátano 60 g','Leche desnatada 100 ml'],
+  steps:['Tritura todo con hielo si se desea.'],
+  tip:'Potasio de la fruta: útil frente a la hipertensión.'},
 ];
 
 const CATS = ['Todos','Verduras','Frutas','Cereales','Proteínas','Lácteos','Grasas','Procesados'];
@@ -567,112 +664,4 @@ const firstW=wArr[0];
 const diff=lastW&&firstW?(lastW.weight-firstW.weight):null;
 let stats=`
 <div class="vital-stat"><div class="v">${last&&last.sys?last.sys+'/'+last.dia:'--'}</div><div class="l">Última TA</div></div>
-<div class="vital-stat"><div class="v">${last&&last.pulse?last.pulse:'--'}</div><div class="l">Pulso lpm</div></div>
-<div class="vital-stat"><div class="v">${lastW?lastW.weight:'--'}</div><div class="l">Peso kg${diff!=null?' ('+(diff>0?'+':'')+diff.toFixed(1)+')':''}</div></div>`;
-$('#vitalsStats').innerHTML=stats;
-// tabla (últimas 10)
-const rows=[...vitals].reverse().slice(0,10).map(v=>{
-const bc=v.sys?bpClass(v.sys,v.dia):null;
-return `<tr>
-  <td>${new Date(v.date).toLocaleDateString('es-ES')}</td>
-  <td>${v.sys?v.sys+'/'+v.dia:'--'}${bc?' <span class="bp-badge '+bc[0]+'">'+bc[1]+'</span>':''}</td>
-  <td>${v.pulse||'--'}</td>
-  <td>${v.weight||'--'}</td>
-</tr>`;}).join('');
-$('#vitalsTable').innerHTML=`<tr><th>Fecha</th><th>TA</th><th>Pulso</th><th>Peso</th></tr>`+(rows||'<tr><td colspan="4" class="muted">Sin mediciones todavía</td></tr>');
-drawCharts();
-}
-function vAdd(){
-const sys=+$('#vSys').value||null, dia=+$('#vDia').value||null, pulse=+$('#vPulse').value||null, weight=+$('#vWeight').value||null;
-if(!sys&&!pulse&&!weight){toast('Introduce algún dato');return;}
-vitals.push({date:new Date().toISOString(),sys,dia,pulse,weight});
-save(); renderVitals();
-$('#vSys').value=$('#vDia').value=$('#vPulse').value=$('#vWeight').value='';
-toast('Medición registrada ❤️');
-}
-$('#vAdd').onclick=vAdd;
-
-function lineChart(svgId,data,series,colors,min,max){
-const svg=document.getElementById(svgId);
-const W=320,H=150,P=14;
-if(!data.length){svg.innerHTML=`<text x="160" y="75" text-anchor="middle" font-size="11" fill="var(--text-light)">Sin datos suficientes</text>`;return;}
-const vals=data.flatMap(d=>series.map(s=>d[s]));
-const lo=Math.min(...vals,min??Infinity), hi=Math.max(...vals,max??-Infinity);
-const range=(hi-lo)||1;
-const x=i=>P+i*(W-2*P)/Math.max(data.length-1,1);
-const y=v=>H-P-(v-lo)/range*(H-2*P);
-let out='';
-// rejilla + objetivo
-if(svgId==='bpChart'){[80,120].forEach((g,gi)=>{out+=`<line x1="${P}" y1="${y(g)}" x2="${W-P}" y2="${y(g)}" stroke="#7cb9e8" stroke-width="1" stroke-dasharray="4 3" opacity=".6"/>`;});}
-series.forEach((s,si)=>{
-const pts=data.map((d,i)=>`${x(i)},${y(d[s])}`).join(' ');
-out+=`<polyline points="${pts}" fill="none" stroke="${colors[si]}" stroke-width="2.5" stroke-linejoin="round"/>`;
-data.forEach((d,i)=>{out+=`<circle cx="${x(i)}" cy="${y(d[s])}" r="3" fill="${colors[si]}"/>`;});
-});
-svg.innerHTML=out;
-}
-function drawCharts(){
-const recent=vitals.slice(-14);
-const bp=recent.filter(v=>v.sys);
-lineChart('bpChart',bp,['sys','dia'],['#d9534f','#1a6b4a']);
-const w=recent.filter(v=>v.weight);
-lineChart('wChart',w,['weight'],['#2d8f6b']);
-}
-
-/* ================= EXPORTAR ================= */
-function buildReport(){
-const tot=dayTotals();
-let txt=`RE-LATE NUTRICIÓN — Diario de ${new Date().toLocaleDateString('es-ES')}\nObjetivo: ${goal} kcal\n\n`;
-MEALS.forEach(m=>{
-const t=mealTotals(meals[m.id]);
-txt+=`${m.label} (${fmt(t.k)} kcal):\n`;
-if(meals[m.id].length) meals[m.id].forEach(it=>txt+=`  • ${it.name} (${it.qty}${it.unit}) — ${fmt(it.k)} kcal\n`);
-else txt+='  (sin registros)\n';
-txt+='\n';
-});
-txt+=`TOTAL DEL DÍA: ${fmt(tot.k)} kcal | P ${fmt(tot.p)}g | G ${fmt(tot.f)}g | HC ${fmt(tot.car)}g\n`;
-txt+=`Progreso: ${Math.round(tot.k/goal*100)}% del objetivo\n\nÚLTIMOS 7 DÍAS (desayuno/media/comida/cena):\n`;
-for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const key=d.toISOString().slice(0,10);const v=diary[key]||{};
-const vals=MEALS.map(m=>fmt(v[m.id]||0)).join(' / ');
-txt+=`${d.toLocaleDateString('es-ES')}: ${vals} kcal\n`;}
-return txt;
-}
-function buildHealthReport(){
-let txt=`RE-LATE NUTRICIÓN — Registro cardiovascular\nGenerado: ${new Date().toLocaleString('es-ES')}\n\nFECHA | TA | PULSO | PESO\n`;
-vitals.forEach(v=>{txt+=`${new Date(v.date).toLocaleDateString('es-ES')} | ${v.sys?v.sys+'/'+v.dia:'--'} | ${v.pulse||'--'} | ${v.weight||'--'}\n`;});
-if(!vitals.length)txt+='(sin mediciones)\n';
-return txt;
-}
-function downloadTxt(content,name){const blob=new Blob([content],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();}
-$('#exportDownload').onclick=()=>{downloadTxt(buildReport(),'diario-relate-'+todayKey()+'.txt');toast('Descargado ⬇️');};
-$('#exportCopy').onclick=async()=>{try{await navigator.clipboard.writeText(buildReport());toast('Copiado 📋');}catch(e){toast('No se pudo copiar');}};
-$('#exportShare').onclick=async()=>{const txt=buildReport();if(navigator.share){try{await navigator.share({title:'Diario Re-Late',text:txt});}catch(e){}}else{try{await navigator.clipboard.writeText(txt);toast('Compartido/copiado 📲');}catch(e){toast('No disponible');}}};
-$('#exportHealth').onclick=async()=>{const txt=buildHealthReport();if(navigator.share){try{await navigator.share({title:'Registro cardiovascular',text:txt});}catch(e){}}else{downloadTxt(txt,'salud-relate-'+todayKey()+'.txt');toast('Descargado ⬇️');}};
-
-/* ================= RECETAS ================= */
-$('#recipeList').innerHTML=RECIPES.map(r=>`<div class="recipe-card"><h4>${r.t}</h4><p>${r.d}</p></div>`).join('');
-
-/* ================= TABS ================= */
-function switchTab(id){
-document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-$('#'+id).classList.add('active');
-document.querySelector(`.tab-btn[data-tab="${id}"]`).classList.add('active');
-}
-document.querySelectorAll('.tab-btn').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
-
-/* ================= MODO OSCURO ================= */
-$('#darkToggle').onclick=()=>{
-document.body.classList.toggle('dark');
-$('#darkToggle').textContent=document.body.classList.contains('dark')?'☀️':'🌙';
-save(); drawCharts();
-};
-
-/* ================= INIT ================= */
-$('#foodSearch').addEventListener('input',renderFoods);
-load();
-$('#darkToggle').textContent=document.body.classList.contains('dark')?'☀️':'🌙';
-renderChips();renderFoods();renderPrepared();renderMeals();renderDiary();renderVitals();
-</script>
-</body>
-</html>
+<div class="vital-stat"><div class="v">${last&&last.pulse?last.pulse:'--'}</div><div class="l">Pulso lpm

@@ -155,7 +155,7 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 <!-- ===================== PLATOS ===================== -->
 <section class="tab-content" id="tab-plate">
 <div class="card">
-  <h3>🍽️ Tus comidas de hoy</h3>
+  <h3>🍽�?Tus comidas de hoy</h3>
   <p class="muted">Toca un alimento en "Alimentos" y elige a qué comida añadirlo.</p>
   <div id="mealsWrap"></div>
   <div class="nutrition-summary" id="nutriSummary"></div>
@@ -163,7 +163,7 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
     <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
     <div class="progress-text" id="progText">Añade alimentos a tus comidas</div>
   </div>
-  <button class="btn btn-danger btn-block" id="clearDay">🗑️ Vaciar el día</button>
+  <button class="btn btn-danger btn-block" id="clearDay">🗑�?Vaciar el día</button>
 </div>
 <div class="card">
   <h3>🥗 Platos preparados (cardiosaludables)</h3>
@@ -215,7 +215,7 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
     <input type="number" id="vPulse" placeholder="Pulso (70)">
     <input type="number" id="vWeight" placeholder="Peso kg" step="0.1">
   </div>
-  <button class="btn btn-primary btn-block" id="vAdd">➕ Registrar medición</button>
+  <button class="btn btn-primary btn-block" id="vAdd">�?Registrar medición</button>
 </div>
 <div class="card">
   <h3>📉 Tensión arterial (últimos 14 días)</h3>
@@ -240,7 +240,7 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 <!-- ===================== RECETAS ===================== -->
 <section class="tab-content" id="tab-recipes">
 <div class="card">
-  <h3>👨‍🍳 Recetas cardiosaludables</h3>
+  <h3>👨‍�?Recetas cardiosaludables</h3>
   <div id="recipeList"></div>
 </div>
 </section>
@@ -263,9 +263,9 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 <p class="muted" style="line-height:1.5">Re-Late es una aplicación web progresiva diseñada para pacientes en rehabilitación cardíaca y personas que buscan una alimentación saludable. Funciona sin conexión y cumple con el RGPD: todos los datos se almacenan únicamente en tu dispositivo.</p>
 </div>
 <div class="card">
-<h4>✨ Características</h4>
+<h4>�?Características</h4>
 <div class="feat-grid">
-  <div class="feat"><b>🍽️ Alimentos</b>Buscador, cálculo nutricional automático y semáforo cardio.</div>
+  <div class="feat"><b>🍽�?Alimentos</b>Buscador, cálculo nutricional automático y semáforo cardio.</div>
   <div class="feat"><b>📷 Recetas</b>Catálogo cardiosaludable con evidencia científica.</div>
   <div class="feat"><b>📅 Diario</b>Registro de comidas, objetivo calórico e historial semanal.</div>
   <div class="feat"><b>❤️ Salud</b>Control de tensión, pulso y peso con gráficas.</div>
@@ -290,7 +290,7 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 <div class="card">
 <h4>🔒 Privacidad y funcionamiento</h4>
 <div class="privacy" style="margin-bottom:10px"><span class="pi">📴</span><div><b>100% offline:</b> una vez instalada, funciona sin conexión a internet gracias a su service worker.</div></div>
-<div class="privacy"><span class="pi">🛡️</span><div><b>RGPD:</b> no se envían datos a servidores. Todo se guarda localmente en tu dispositivo (localStorage) y puedes exportarlo o borrarlo cuando quieras.</div></div>
+<div class="privacy"><span class="pi">🛡�?/span><div><b>RGPD:</b> no se envían datos a servidores. Todo se guarda localmente en tu dispositivo (localStorage) y puedes exportarlo o borrarlo cuando quieras.</div></div>
 </div>
 <div class="app-footer">
 <div>Re-Late · Nutrición y rehabilitación cardíaca</div>
@@ -302,7 +302,7 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 
 <nav class="tab-bar">
 <button class="tab-btn active" data-tab="tab-foods"><span class="tab-icon">🥦</span>Alimentos</button>
-<button class="tab-btn" data-tab="tab-plate"><span class="tab-icon">🍽️</span>Comidas</button>
+<button class="tab-btn" data-tab="tab-plate"><span class="tab-icon">🍽�?/span>Comidas</button>
 <button class="tab-btn" data-tab="tab-diary"><span class="tab-icon">📊</span>Diario</button>
 <button class="tab-btn" data-tab="tab-health"><span class="tab-icon">❤️</span>Salud</button>
 <button class="tab-btn" data-tab="tab-recipes"><span class="tab-icon">📖</span>Recetas</button>
@@ -321,7 +321,7 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
     <select id="qtyUnit"><option value="g">gramos</option><option value="ud">unidades</option></select>
   </div>
   <div class="qty-preview"><div class="big" id="qtyKcal">0 kcal</div><div class="muted" id="qtyMacro"></div></div>
-  <button class="btn btn-primary btn-block" id="qtyAdd">➕ Añadir a la comida</button>
+  <button class="btn btn-primary btn-block" id="qtyAdd">�?Añadir a la comida</button>
   <button class="btn btn-outline btn-block" id="qtyCancel">Cancelar</button>
 </div>
 </div>
@@ -405,7 +405,7 @@ const CATS = ['Todos','Verduras','Frutas','Cereales','Proteínas','Lácteos','Gr
 const MEALS = [
  {id:'breakfast',label:'🌅 Desayuno',cls:'seg-break'},
  {id:'snack',label:'🥪 Media',cls:'seg-snack'},
- {id:'lunch',label:'🍽️ Comida',cls:'seglunch'},
+ {id:'lunch',label:'🍽�?Comida',cls:'seglunch'},
  {id:'dinner',label:'🌙 Cena',cls:'segdinner'},
 ];
 

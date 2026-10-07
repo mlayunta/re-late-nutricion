@@ -135,8 +135,8 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 <body>
 <header class="app-header">
 <div>
-  <h1>🫀 Re-Late Nutrición</h1>
-  <div class="subtitle">Saludable · Rehabilitación cardíaca</div>
+<h1>🫀 Re-Late Nutrición</h1>
+<div class="subtitle">Saludable · Rehabilitación cardíaca</div>
 </div>
 <button class="icon-btn" id="darkToggle" title="Modo oscuro">🌙</button>
 </header>
@@ -145,103 +145,103 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 <!-- ===================== ALIMENTOS ===================== -->
 <section class="tab-content active" id="tab-foods">
 <div class="card">
-  <h3>🔎 Busca o filtra alimentos</h3>
-  <input class="search-box" id="foodSearch" placeholder="Ej: salmón, arroz, manzana...">
-  <div class="cat-chips" id="catChips"></div>
-  <div class="food-list" id="foodList"></div>
+<h3>🔍 Busca o filtra alimentos</h3>
+<input class="search-box" id="foodSearch" placeholder="Ej: salmón, arroz, manzana...">
+<div class="cat-chips" id="catChips"></div>
+<div class="food-list" id="foodList"></div>
 </div>
 </section>
 
 <!-- ===================== PLATOS ===================== -->
 <section class="tab-content" id="tab-plate">
 <div class="card">
-  <h3>🍽�?Tus comidas de hoy</h3>
-  <p class="muted">Toca un alimento en "Alimentos" y elige a qué comida añadirlo.</p>
-  <div id="mealsWrap"></div>
-  <div class="nutrition-summary" id="nutriSummary"></div>
-  <div class="progress-wrap">
-    <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
-    <div class="progress-text" id="progText">Añade alimentos a tus comidas</div>
-  </div>
-  <button class="btn btn-danger btn-block" id="clearDay">🗑�?Vaciar el día</button>
+<h3>🍽️ Tus comidas de hoy</h3>
+<p class="muted">Toca un alimento en "Alimentos" y elige a qué comida añadirlo.</p>
+<div id="mealsWrap"></div>
+<div class="nutrition-summary" id="nutriSummary"></div>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+  <div class="progress-text" id="progText">Añade alimentos a tus comidas</div>
+</div>
+<button class="btn btn-danger btn-block" id="clearDay">🗑️ Vaciar el día</button>
 </div>
 <div class="card">
-  <h3>🥗 Platos preparados (cardiosaludables)</h3>
-  <div class="food-list" id="preparedList"></div>
+<h3>🥗 Platos preparados (cardiosaludables)</h3>
+<div class="food-list" id="preparedList"></div>
 </div>
 </section>
 
 <!-- ===================== DIARIO ===================== -->
 <section class="tab-content" id="tab-diary">
 <div class="card">
-  <h3>🎯 Objetivo diario</h3>
-  <div class="input-row">
-    <label>Kcal objetivo</label>
-    <input type="number" id="goalInput" min="800" max="5000" step="50">
-  </div>
-  <div class="progress-wrap">
-    <div class="progress-bar"><div class="progress-fill" id="dayProgFill" style="width:0%"></div></div>
-    <div class="progress-text" id="dayProgText"></div>
-  </div>
+<h3>🎯 Objetivo diario</h3>
+<div class="input-row">
+  <label>Kcal objetivo</label>
+  <input type="number" id="goalInput" min="800" max="5000" step="50">
+</div>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="dayProgFill" style="width:0%"></div></div>
+  <div class="progress-text" id="dayProgText"></div>
+</div>
 </div>
 <div class="card">
-  <h3>📈 Historial semanal (kcal por comida)</h3>
-  <div class="chart-wrap" id="weekChart"></div>
-  <div class="legend">
-    <span><i style="background:#f0ad4e"></i>Desayuno</span>
-    <span><i style="background:#7cb9e8"></i>Media</span>
-    <span><i style="background:#1a6b4a"></i>Comida</span>
-    <span><i style="background:#2d8f6b"></i>Cena</span>
-  </div>
+<h3>📈 Historial semanal (kcal por comida)</h3>
+<div class="chart-wrap" id="weekChart"></div>
+<div class="legend">
+  <span><i style="background:#f0ad4e"></i>Desayuno</span>
+  <span><i style="background:#7cb9e8"></i>Media</span>
+  <span><i style="background:#1a6b4a"></i>Comida</span>
+  <span><i style="background:#2d8f6b"></i>Cena</span>
+</div>
 </div>
 <div class="card">
-  <h3>📤 Exportar diario</h3>
-  <p class="muted">Genera un resumen para tu médico o fisioterapeuta.</p>
-  <button class="btn btn-primary btn-block" id="exportDownload">⬇️ Descargar (.txt)</button>
-  <button class="btn btn-outline btn-block" id="exportCopy">📋 Copiar al portapapeles</button>
-  <button class="btn btn-outline btn-block" id="exportShare">📲 Compartir</button>
+<h3>📤 Exportar diario</h3>
+<p class="muted">Genera un resumen para tu médico o fisioterapeuta.</p>
+<button class="btn btn-primary btn-block" id="exportDownload">⬇️ Descargar (.txt)</button>
+<button class="btn btn-outline btn-block" id="exportCopy">📋 Copiar al portapapeles</button>
+<button class="btn btn-outline btn-block" id="exportShare">📲 Compartir</button>
 </div>
 </section>
 
 <!-- ===================== SALUD ===================== -->
 <section class="tab-content" id="tab-health">
 <div class="card">
-  <h3>❤️ Registro cardiovascular</h3>
-  <p class="muted">Anota tu tensión, pulso y peso. Ideal para el seguimiento en rehabilitación cardíaca.</p>
-  <div class="vitals-grid" id="vitalsStats"></div>
-  <div class="vital-form">
-    <input type="number" id="vSys" placeholder="Sistólica (120)">
-    <input type="number" id="vDia" placeholder="Diastólica (80)">
-    <input type="number" id="vPulse" placeholder="Pulso (70)">
-    <input type="number" id="vWeight" placeholder="Peso kg" step="0.1">
-  </div>
-  <button class="btn btn-primary btn-block" id="vAdd">�?Registrar medición</button>
+<h3>❤️ Registro cardiovascular</h3>
+<p class="muted">Anota tu tensión, pulso y peso. Ideal para el seguimiento en rehabilitación cardíaca.</p>
+<div class="vitals-grid" id="vitalsStats"></div>
+<div class="vital-form">
+  <input type="number" id="vSys" placeholder="Sistólica (120)">
+  <input type="number" id="vDia" placeholder="Diastólica (80)">
+  <input type="number" id="vPulse" placeholder="Pulso (70)">
+  <input type="number" id="vWeight" placeholder="Peso kg" step="0.1">
+</div>
+<button class="btn btn-primary btn-block" id="vAdd">➕ Registrar medición</button>
 </div>
 <div class="card">
-  <h3>📉 Tensión arterial (últimos 14 días)</h3>
-  <svg class="linechart" id="bpChart" viewBox="0 0 320 150" preserveAspectRatio="none"></svg>
-  <div class="legend">
-    <span><i style="background:#d9534f"></i>Sistólica</span>
-    <span><i style="background:#1a6b4a"></i>Diastólica</span>
-    <span><i style="background:#7cb9e8"></i>Objetivo 120/80</span>
-  </div>
+<h3>📉 Tensión arterial (últimos 14 días)</h3>
+<svg class="linechart" id="bpChart" viewBox="0 0 320 150" preserveAspectRatio="none"></svg>
+<div class="legend">
+  <span><i style="background:#d9534f"></i>Sistólica</span>
+  <span><i style="background:#1a6b4a"></i>Diastólica</span>
+  <span><i style="background:#7cb9e8"></i>Objetivo 120/80</span>
+</div>
 </div>
 <div class="card">
-  <h3>⚖️ Peso (últimos 14 días)</h3>
-  <svg class="linechart" id="wChart" viewBox="0 0 320 150" preserveAspectRatio="none"></svg>
+<h3>⚖️ Peso (últimos 14 días)</h3>
+<svg class="linechart" id="wChart" viewBox="0 0 320 150" preserveAspectRatio="none"></svg>
 </div>
 <div class="card">
-  <h3>📒 Historial de mediciones</h3>
-  <div style="overflow-x:auto"><table class="vitals-table" id="vitalsTable"></table></div>
-  <button class="btn btn-outline btn-block" id="exportHealth">📤 Exportar registro de salud</button>
+<h3>📒 Historial de mediciones</h3>
+<div style="overflow-x:auto"><table class="vitals-table" id="vitalsTable"></table></div>
+<button class="btn btn-outline btn-block" id="exportHealth">📤 Exportar registro de salud</button>
 </div>
 </section>
 
 <!-- ===================== RECETAS ===================== -->
 <section class="tab-content" id="tab-recipes">
 <div class="card">
-  <h3>👨‍�?Recetas cardiosaludables</h3>
-  <div id="recipeList"></div>
+<h3>📖 Recetas cardiosaludables</h3>
+<div id="recipeList"></div>
 </div>
 </section>
 
@@ -252,10 +252,10 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 <h2>Re-Late Nutrición Saludable</h2>
 <div class="tag">Aplicación PWA de nutrición saludable para rehabilitación cardíaca</div>
 <div class="badges">
-  <span class="badge">📱 PWA</span>
-  <span class="badge">📴 100% Offline</span>
-  <span class="badge">🔒 RGPD</span>
-  <span class="badge">❤️ Salud cardíaca</span>
+<span class="badge">📱 PWA</span>
+<span class="badge">📴 100% Offline</span>
+<span class="badge">🔒 RGPD</span>
+<span class="badge">❤️ Salud cardíaca</span>
 </div>
 </div>
 <div class="card">
@@ -263,23 +263,23 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 <p class="muted" style="line-height:1.5">Re-Late es una aplicación web progresiva diseñada para pacientes en rehabilitación cardíaca y personas que buscan una alimentación saludable. Funciona sin conexión y cumple con el RGPD: todos los datos se almacenan únicamente en tu dispositivo.</p>
 </div>
 <div class="card">
-<h4>�?Características</h4>
+<h4>✨ Características</h4>
 <div class="feat-grid">
-  <div class="feat"><b>🍽�?Alimentos</b>Buscador, cálculo nutricional automático y semáforo cardio.</div>
-  <div class="feat"><b>📷 Recetas</b>Catálogo cardiosaludable con evidencia científica.</div>
-  <div class="feat"><b>📅 Diario</b>Registro de comidas, objetivo calórico e historial semanal.</div>
-  <div class="feat"><b>❤️ Salud</b>Control de tensión, pulso y peso con gráficas.</div>
+<div class="feat"><b>🍽️ Alimentos</b>Buscador, cálculo nutricional automático y semáforo cardio.</div>
+<div class="feat"><b>📷 Recetas</b>Catálogo cardiosaludable con evidencia científica.</div>
+<div class="feat"><b>📅 Diario</b>Registro de comidas, objetivo calórico e historial semanal.</div>
+<div class="feat"><b>❤️ Salud</b>Control de tensión, pulso y peso con gráficas.</div>
 </div>
 </div>
 <div class="card">
 <h4>🩺 Perfiles clínicos</h4>
 <p class="muted" style="margin-bottom:8px">Cada perfil ajusta dinámicamente los umbrales del semáforo nutricional:</p>
 <div class="profile-list">
-  <div class="profile-item"><span class="pi">🫀</span>Cardíaco</div>
-  <div class="profile-item"><span class="pi">🩸</span>Hipertenso</div>
-  <div class="profile-item"><span class="pi">📉</span>Dislipidemia</div>
-  <div class="profile-item"><span class="pi">💉</span>Diabetes tipo 1</div>
-  <div class="profile-item"><span class="pi">🍬</span>Diabetes tipo 2</div>
+<div class="profile-item"><span class="pi">🫀</span>Cardíaco</div>
+<div class="profile-item"><span class="pi">🩸</span>Hipertenso</div>
+<div class="profile-item"><span class="pi">📉</span>Dislipidemia</div>
+<div class="profile-item"><span class="pi">💉</span>Diabetes tipo 1</div>
+<div class="profile-item"><span class="pi">🍬</span>Diabetes tipo 2</div>
 </div>
 </div>
 <div class="card">
@@ -290,7 +290,7 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 <div class="card">
 <h4>🔒 Privacidad y funcionamiento</h4>
 <div class="privacy" style="margin-bottom:10px"><span class="pi">📴</span><div><b>100% offline:</b> una vez instalada, funciona sin conexión a internet gracias a su service worker.</div></div>
-<div class="privacy"><span class="pi">🛡�?/span><div><b>RGPD:</b> no se envían datos a servidores. Todo se guarda localmente en tu dispositivo (localStorage) y puedes exportarlo o borrarlo cuando quieras.</div></div>
+<div class="privacy"><span class="pi">🛡️</span><div><b>RGPD:</b> no se envían datos a servidores. Todo se guarda localmente en tu dispositivo (localStorage) y puedes exportarlo o borrarlo cuando quieras.</div></div>
 </div>
 <div class="app-footer">
 <div>Re-Late · Nutrición y rehabilitación cardíaca</div>
@@ -302,7 +302,7 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 
 <nav class="tab-bar">
 <button class="tab-btn active" data-tab="tab-foods"><span class="tab-icon">🥦</span>Alimentos</button>
-<button class="tab-btn" data-tab="tab-plate"><span class="tab-icon">🍽�?/span>Comidas</button>
+<button class="tab-btn" data-tab="tab-plate"><span class="tab-icon">🍽️</span>Comidas</button>
 <button class="tab-btn" data-tab="tab-diary"><span class="tab-icon">📊</span>Diario</button>
 <button class="tab-btn" data-tab="tab-health"><span class="tab-icon">❤️</span>Salud</button>
 <button class="tab-btn" data-tab="tab-recipes"><span class="tab-icon">📖</span>Recetas</button>
@@ -312,17 +312,17 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 <!-- MODAL RACIÓN -->
 <div class="modal-overlay" id="qtyModal">
 <div class="modal">
-  <h3 id="qtyTitle">Ración</h3>
-  <p class="muted">Elige la comida e indica la cantidad.</p>
-  <div class="meal-chips" id="mealChips"></div>
-  <div class="input-row">
-    <label>Cantidad</label>
-    <input type="number" id="qtyInput" min="1" step="1">
-    <select id="qtyUnit"><option value="g">gramos</option><option value="ud">unidades</option></select>
-  </div>
-  <div class="qty-preview"><div class="big" id="qtyKcal">0 kcal</div><div class="muted" id="qtyMacro"></div></div>
-  <button class="btn btn-primary btn-block" id="qtyAdd">�?Añadir a la comida</button>
-  <button class="btn btn-outline btn-block" id="qtyCancel">Cancelar</button>
+<h3 id="qtyTitle">Ración</h3>
+<p class="muted">Elige la comida e indica la cantidad.</p>
+<div class="meal-chips" id="mealChips"></div>
+<div class="input-row">
+  <label>Cantidad</label>
+  <input type="number" id="qtyInput" min="1" step="1">
+  <select id="qtyUnit"><option value="g">gramos</option><option value="ud">unidades</option></select>
+</div>
+<div class="qty-preview"><div class="big" id="qtyKcal">0 kcal</div><div class="muted" id="qtyMacro"></div></div>
+<button class="btn btn-primary btn-block" id="qtyAdd">✅ Añadir a la comida</button>
+<button class="btn btn-outline btn-block" id="qtyCancel">Cancelar</button>
 </div>
 </div>
 
@@ -405,7 +405,7 @@ const CATS = ['Todos','Verduras','Frutas','Cereales','Proteínas','Lácteos','Gr
 const MEALS = [
  {id:'breakfast',label:'🌅 Desayuno',cls:'seg-break'},
  {id:'snack',label:'🥪 Media',cls:'seg-snack'},
- {id:'lunch',label:'🍽�?Comida',cls:'seglunch'},
+ {id:'lunch',label:'🍽️ Comida',cls:'seglunch'},
  {id:'dinner',label:'🌙 Cena',cls:'segdinner'},
 ];
 
@@ -428,7 +428,7 @@ function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('sh
 function lightDot(l){ return `<span class="traffic t-${l==='green'?'green':l==='yellow'?'yellow':'red'}"></span>`; }
 function mealTotals(arr){ return arr.reduce((a,b)=>({k:a.k+b.k,p:a.p+b.p,f:a.f+b.f,car:a.car+b.car}),{k:0,p:0,f:0,car:0}); }
 function dayTotals(){ return MEALS.reduce((a,m)=>{const t=mealTotals(meals[m.id]);return{k:a.k+t.k,p:a.p+t.p,f:a.f+t.f,car:a.car+t.car};},{k:0,p:0,f:0,car:0}); }
-function bpClass(sys,dia){ if(sys<120&&dia<80)return['bp-opt','\u00d3ptima']; if(sys<130&&dia<85)return['bp-norm','Normal']; if(sys<140||dia<90)return['bp-high','Elevada']; return['bp-vhigh','Alta']; }
+function bpClass(sys,dia){ if(sys<120&&dia<80)return['bp-opt','Óptima']; if(sys<130&&dia<85)return['bp-norm','Normal']; if(sys<140||dia<90)return['bp-high','Elevada']; return['bp-vhigh','Alta']; }
 
 /* ================= RENDER ALIMENTOS ================= */
 function renderChips(){
@@ -439,10 +439,10 @@ function renderFoods(){
 const q = $('#foodSearch').value.toLowerCase();
 const list = FOODS.filter(f=>(activeCat==='Todos'||f.c===activeCat)&&f.n.toLowerCase().includes(q));
 $('#foodList').innerHTML = list.length ? list.map(f=>`
-  <div class="food-item" data-n="${f.n}">
-    <span class="food-name">${lightDot(f.light)}${f.n}</span>
-    <span class="food-kcal">${f.k} kcal / ${f.ref}${f.unit==='ud'?' ud':' g'}<br>${f.p}P \u00b7 ${f.f}G \u00b7 ${f.car}C</span>
-  </div>`).join('') : '<p class="muted" style="padding:12px">No se encontraron alimentos.</p>';
+<div class="food-item" data-n="${f.n}">
+  <span class="food-name">${lightDot(f.light)}${f.n}</span>
+  <span class="food-kcal">${f.k} kcal / ${f.ref}${f.unit==='ud'?' ud':' g'}<br>${f.p}P · ${f.f}G · ${f.car}C</span>
+</div>`).join('') : '<p class="muted" style="padding:12px">No se encontraron alimentos.</p>';
 document.querySelectorAll('#foodList .food-item').forEach(el=>el.onclick=()=>openQty(FOODS.find(f=>f.n===el.dataset.n)));
 }
 
@@ -453,7 +453,7 @@ document.querySelectorAll('.meal-chip').forEach(ch=>ch.onclick=()=>{pendingMeal=
 }
 function openQty(f){
 pendingFood=f;
-$('#qtyTitle').textContent='\U0001F37D\uFE0F '+f.n;
+$('#qtyTitle').textContent='🍽️ '+f.n;
 $('#qtyInput').value=f.ref;
 $('#qtyUnit').value=f.unit||'g';
 $('#qtyUnit').disabled=false; $('#qtyInput').disabled=false;
@@ -467,7 +467,7 @@ const qty=+$('#qtyInput').value||0, unit=$('#qtyUnit').value;
 const factor = unit==='g' ? qty/pendingFood.ref : qty;
 const k=pendingFood.k*factor, p=pendingFood.p*factor, f2=pendingFood.f*factor, c=pendingFood.car*factor;
 $('#qtyKcal').textContent=fmt(k)+' kcal';
-$('#qtyMacro').textContent=`${fmt(p)} g prote\u00edna \u00b7 ${fmt(f2)} g grasa \u00b7 ${fmt(c)} g hidratos`;
+$('#qtyMacro').textContent=`${fmt(p)} g proteína · ${fmt(f2)} g grasa · ${fmt(c)} g hidratos`;
 pendingFood._calc={k,p,f:f2,car:c,qty,unit};
 }
 $('#qtyInput').addEventListener('input',updateQtyPreview);
@@ -478,58 +478,58 @@ if(!pendingFood||!pendingFood._calc)return;
 const c=pendingFood._calc;
 meals[pendingMeal].push({name:pendingFood.n,k:c.k,p:c.p,f:c.f,car:c.car,qty:c.qty,unit:c.unit});
 save(); renderMeals(); $('#qtyModal').classList.remove('show');
-toast('A\u00f1adido \u2705'); switchTab('tab-plate');
+toast('Añadido ✅'); switchTab('tab-plate');
 };
 
 /* ================= COMIDAS ================= */
 function renderMeals(){
 $('#mealsWrap').innerHTML = MEALS.map(m=>{
-  const arr=meals[m.id], t=mealTotals(arr);
-  return `<div class="meal-section">
-    <div class="meal-head"><h4>${m.label}</h4><span class="meal-kcal">${fmt(t.k)} kcal</span></div>
-    <div class="meal-plate">${arr.length?arr.map((it,i)=>`
-      <div class="plate-item">
-        <button class="remove-btn" data-m="${m.id}" data-i="${i}">\u2715</button>
-        <div class="p-name">${it.name}</div>
-        <div class="p-qty">${it.qty}${it.unit}</div>
-        <div class="p-kcal">${fmt(it.k)} kcal</div>
-      </div>`).join(''):'<p class="muted">Sin alimentos.</p>'}</div>
-  </div>`;
+const arr=meals[m.id], t=mealTotals(arr);
+return `<div class="meal-section">
+  <div class="meal-head"><h4>${m.label}</h4><span class="meal-kcal">${fmt(t.k)} kcal</span></div>
+  <div class="meal-plate">${arr.length?arr.map((it,i)=>`
+    <div class="plate-item">
+      <button class="remove-btn" data-m="${m.id}" data-i="${i}">✕</button>
+      <div class="p-name">${it.name}</div>
+      <div class="p-qty">${it.qty}${it.unit}</div>
+      <div class="p-kcal">${fmt(it.k)} kcal</div>
+    </div>`).join(''):'<p class="muted">Sin alimentos.</p>'}</div>
+</div>`;
 }).join('');
 document.querySelectorAll('.remove-btn').forEach(b=>b.onclick=()=>{meals[b.dataset.m].splice(+b.dataset.i,1);save();renderMeals();});
 const tot=dayTotals();
 $('#nutriSummary').innerHTML=`
-  <div class="nutri-box"><div class="value">${fmt(tot.k)}</div><div class="label">kcal</div></div>
-  <div class="nutri-box"><div class="value">${fmt(tot.p)}</div><div class="label">Prote\u00edna</div></div>
-  <div class="nutri-box"><div class="value">${fmt(tot.f)}</div><div class="label">Grasa</div></div>
-  <div class="nutri-box"><div class="value">${fmt(tot.car)}</div><div class="label">Hidratos</div></div>`;
+<div class="nutri-box"><div class="value">${fmt(tot.k)}</div><div class="label">kcal</div></div>
+<div class="nutri-box"><div class="value">${fmt(tot.p)}</div><div class="label">Proteína</div></div>
+<div class="nutri-box"><div class="value">${fmt(tot.f)}</div><div class="label">Grasa</div></div>
+<div class="nutri-box"><div class="value">${fmt(tot.car)}</div><div class="label">Hidratos</div></div>`;
 const pct=goal?Math.min(tot.k/goal*100,100):0;
 $('#progFill').style.width=pct+'%';
 $('#progFill').classList.toggle('over',tot.k>goal);
-$('#progText').textContent=`${fmt(tot.k)} de ${goal} kcal \u00b7 ${Math.round(tot.k/goal*100)}% del objetivo`;
+$('#progText').textContent=`${fmt(tot.k)} de ${goal} kcal · ${Math.round(tot.k/goal*100)}% del objetivo`;
 const d={}; MEALS.forEach(m=>d[m.id]=mealTotals(meals[m.id]).k);
 diary[todayKey()]=d; save(); renderDiary();
 }
-$('#clearDay').onclick=()=>{meals={breakfast:[],snack:[],lunch:[],dinner:[]};save();renderMeals();toast('D\u00eda vaciado');};
+$('#clearDay').onclick=()=>{meals={breakfast:[],snack:[],lunch:[],dinner:[]};save();renderMeals();toast('Día vaciado');};
 
 /* ================= PLATOS PREPARADOS ================= */
 function renderPrepared(){
 $('#preparedList').innerHTML=PREPARED.map((p,i)=>`
-  <div class="food-item" data-i="${i}">
-    <span class="food-name">${lightDot(p.light)}${p.n}</span>
-    <span class="food-kcal">${p.k} kcal \u00b7 ${p.p}P \u00b7 ${p.f}G \u00b7 ${p.car}C</span>
-  </div>`).join('');
+<div class="food-item" data-i="${i}">
+  <span class="food-name">${lightDot(p.light)}${p.n}</span>
+  <span class="food-kcal">${p.k} kcal · ${p.p}P · ${p.f}G · ${p.car}C</span>
+</div>`).join('');
 document.querySelectorAll('#preparedList .food-item').forEach(el=>el.onclick=()=>{
-  const p=PREPARED[+el.dataset.i];
-  pendingFood={...p,ref:1,unit:'ud',_calc:{k:p.k,p:p.p,f:p.f,car:p.car,qty:1,unit:' raci\u00f3n'}};
-  pendingMeal='lunch';
-  $('#qtyTitle').textContent='\U0001F957 '+p.n;
-  $('#qtyInput').value=1; $('#qtyUnit').value='ud';
-  $('#qtyUnit').disabled=true; $('#qtyInput').disabled=true;
-  $('#qtyKcal').textContent=fmt(p.k)+' kcal';
-  $('#qtyMacro').textContent=`${fmt(p.p)} g prote\u00edna \u00b7 ${fmt(p.f)} g grasa \u00b7 ${fmt(p.car)} g hidratos`;
-  renderMealChips();
-  $('#qtyModal').classList.add('show');
+const p=PREPARED[+el.dataset.i];
+pendingFood={...p,ref:1,unit:'ud',_calc:{k:p.k,p:p.p,f:p.f,car:p.car,qty:1,unit:' ración'}};
+pendingMeal='lunch';
+$('#qtyTitle').textContent='🥗 '+p.n;
+$('#qtyInput').value=1; $('#qtyUnit').value='ud';
+$('#qtyUnit').disabled=true; $('#qtyInput').disabled=true;
+$('#qtyKcal').textContent=fmt(p.k)+' kcal';
+$('#qtyMacro').textContent=`${fmt(p.p)} g proteína · ${fmt(p.f)} g grasa · ${fmt(p.car)} g hidratos`;
+renderMealChips();
+$('#qtyModal').classList.add('show');
 });
 }
 
@@ -544,17 +544,17 @@ $('#dayProgFill').classList.toggle('over',total>goal);
 $('#dayProgText').textContent=`Hoy: ${fmt(total)} kcal de ${goal} (${Math.round(total/goal*100)}%)`;
 const days=[];
 for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const key=d.toISOString().slice(0,10);
-  days.push({key,lbl:['D','L','M','X','J','V','S'][d.getDay()],val:diary[key]||{},today:i===0});}
+days.push({key,lbl:['D','L','M','X','J','V','S'][d.getDay()],val:diary[key]||{},today:i===0});}
 const max=Math.max(goal,...days.map(d=>MEALS.reduce((a,m)=>a+(d.val[m.id]||0),0)),1);
 $('#weekChart').innerHTML=days.map(d=>{
-  const t=MEALS.reduce((a,m)=>a+(d.val[m.id]||0),0);
-  return `<div class="chart-col">
-    <div class="chart-val">${t?fmt(t):''}</div>
-    <div class="chart-stack" style="height:${Math.max(t/max*100,2)}%">
-      ${MEALS.map(m=>`<div class="${m.cls}" style="height:${t?(d.val[m.id]||0)/t*100:0}%"></div>`).join('')}
-    </div>
-    <div class="chart-day">${d.lbl}</div>
-  </div>`;}).join('');
+const t=MEALS.reduce((a,m)=>a+(d.val[m.id]||0),0);
+return `<div class="chart-col">
+  <div class="chart-val">${t?fmt(t):''}</div>
+  <div class="chart-stack" style="height:${Math.max(t/max*100,2)}%">
+    ${MEALS.map(m=>`<div class="${m.cls}" style="height:${t?(d.val[m.id]||0)/t*100:0}%"></div>`).join('')}
+  </div>
+  <div class="chart-day">${d.lbl}</div>
+</div>`;}).join('');
 }
 $('#goalInput').addEventListener('change',e=>{goal=+e.target.value||2000;save();renderMeals();renderDiary();});
 
@@ -566,29 +566,29 @@ const lastW=wArr[wArr.length-1];
 const firstW=wArr[0];
 const diff=lastW&&firstW?(lastW.weight-firstW.weight):null;
 let stats=`
-  <div class="vital-stat"><div class="v">${last&&last.sys?last.sys+'/'+last.dia:'--'}</div><div class="l">\u00daltima TA</div></div>
-  <div class="vital-stat"><div class="v">${last&&last.pulse?last.pulse:'--'}</div><div class="l">Pulso lpm</div></div>
-  <div class="vital-stat"><div class="v">${lastW?lastW.weight:'--'}</div><div class="l">Peso kg${diff!=null?' ('+(diff>0?'+':'')+diff.toFixed(1)+')':''}</div></div>`;
+<div class="vital-stat"><div class="v">${last&&last.sys?last.sys+'/'+last.dia:'--'}</div><div class="l">Última TA</div></div>
+<div class="vital-stat"><div class="v">${last&&last.pulse?last.pulse:'--'}</div><div class="l">Pulso lpm</div></div>
+<div class="vital-stat"><div class="v">${lastW?lastW.weight:'--'}</div><div class="l">Peso kg${diff!=null?' ('+(diff>0?'+':'')+diff.toFixed(1)+')':''}</div></div>`;
 $('#vitalsStats').innerHTML=stats;
-// tabla (\u00faltimas 10)
+// tabla (últimas 10)
 const rows=[...vitals].reverse().slice(0,10).map(v=>{
-  const bc=v.sys?bpClass(v.sys,v.dia):null;
-  return `<tr>
-    <td>${new Date(v.date).toLocaleDateString('es-ES')}</td>
-    <td>${v.sys?v.sys+'/'+v.dia:'--'}${bc?' <span class="bp-badge '+bc[0]+'">'+bc[1]+'</span>':''}</td>
-    <td>${v.pulse||'--'}</td>
-    <td>${v.weight||'--'}</td>
-  </tr>`;}).join('');
-$('#vitalsTable').innerHTML=`<tr><th>Fecha</th><th>TA</th><th>Pulso</th><th>Peso</th></tr>`+(rows||'<tr><td colspan="4" class="muted">Sin mediciones todav\u00eda</td></tr>');
+const bc=v.sys?bpClass(v.sys,v.dia):null;
+return `<tr>
+  <td>${new Date(v.date).toLocaleDateString('es-ES')}</td>
+  <td>${v.sys?v.sys+'/'+v.dia:'--'}${bc?' <span class="bp-badge '+bc[0]+'">'+bc[1]+'</span>':''}</td>
+  <td>${v.pulse||'--'}</td>
+  <td>${v.weight||'--'}</td>
+</tr>`;}).join('');
+$('#vitalsTable').innerHTML=`<tr><th>Fecha</th><th>TA</th><th>Pulso</th><th>Peso</th></tr>`+(rows||'<tr><td colspan="4" class="muted">Sin mediciones todavía</td></tr>');
 drawCharts();
 }
 function vAdd(){
 const sys=+$('#vSys').value||null, dia=+$('#vDia').value||null, pulse=+$('#vPulse').value||null, weight=+$('#vWeight').value||null;
-if(!sys&&!pulse&&!weight){toast('Introduce alg\u00fan dato');return;}
+if(!sys&&!pulse&&!weight){toast('Introduce algún dato');return;}
 vitals.push({date:new Date().toISOString(),sys,dia,pulse,weight});
 save(); renderVitals();
 $('#vSys').value=$('#vDia').value=$('#vPulse').value=$('#vWeight').value='';
-toast('Medici\u00f3n registrada \u2764\uFE0F');
+toast('Medición registrada ❤️');
 }
 $('#vAdd').onclick=vAdd;
 
@@ -605,9 +605,9 @@ let out='';
 // rejilla + objetivo
 if(svgId==='bpChart'){[80,120].forEach((g,gi)=>{out+=`<line x1="${P}" y1="${y(g)}" x2="${W-P}" y2="${y(g)}" stroke="#7cb9e8" stroke-width="1" stroke-dasharray="4 3" opacity=".6"/>`;});}
 series.forEach((s,si)=>{
-  const pts=data.map((d,i)=>`${x(i)},${y(d[s])}`).join(' ');
-  out+=`<polyline points="${pts}" fill="none" stroke="${colors[si]}" stroke-width="2.5" stroke-linejoin="round"/>`;
-  data.forEach((d,i)=>{out+=`<circle cx="${x(i)}" cy="${y(d[s])}" r="3" fill="${colors[si]}"/>`;});
+const pts=data.map((d,i)=>`${x(i)},${y(d[s])}`).join(' ');
+out+=`<polyline points="${pts}" fill="none" stroke="${colors[si]}" stroke-width="2.5" stroke-linejoin="round"/>`;
+data.forEach((d,i)=>{out+=`<circle cx="${x(i)}" cy="${y(d[s])}" r="3" fill="${colors[si]}"/>`;});
 });
 svg.innerHTML=out;
 }
@@ -622,32 +622,32 @@ lineChart('wChart',w,['weight'],['#2d8f6b']);
 /* ================= EXPORTAR ================= */
 function buildReport(){
 const tot=dayTotals();
-let txt=`RE-LATE NUTRICI\u00d3N \u2014 Diario de ${new Date().toLocaleDateString('es-ES')}\nObjetivo: ${goal} kcal\n\n`;
+let txt=`RE-LATE NUTRICIÓN — Diario de ${new Date().toLocaleDateString('es-ES')}\nObjetivo: ${goal} kcal\n\n`;
 MEALS.forEach(m=>{
-  const t=mealTotals(meals[m.id]);
-  txt+=`${m.label} (${fmt(t.k)} kcal):\n`;
-  if(meals[m.id].length) meals[m.id].forEach(it=>txt+=`  \u2022 ${it.name} (${it.qty}${it.unit}) \u2014 ${fmt(it.k)} kcal\n`);
-  else txt+='  (sin registros)\n';
-  txt+='\n';
+const t=mealTotals(meals[m.id]);
+txt+=`${m.label} (${fmt(t.k)} kcal):\n`;
+if(meals[m.id].length) meals[m.id].forEach(it=>txt+=`  • ${it.name} (${it.qty}${it.unit}) — ${fmt(it.k)} kcal\n`);
+else txt+='  (sin registros)\n';
+txt+='\n';
 });
-txt+=`TOTAL DEL D\u00cdA: ${fmt(tot.k)} kcal | P ${fmt(tot.p)}g | G ${fmt(tot.f)}g | HC ${fmt(tot.car)}g\n`;
-txt+=`Progreso: ${Math.round(tot.k/goal*100)}% del objetivo\n\n\u00dALTIMOS 7 D\u00cdAS (desayuno/media/comida/cena):\n`;
+txt+=`TOTAL DEL DÍA: ${fmt(tot.k)} kcal | P ${fmt(tot.p)}g | G ${fmt(tot.f)}g | HC ${fmt(tot.car)}g\n`;
+txt+=`Progreso: ${Math.round(tot.k/goal*100)}% del objetivo\n\nÚLTIMOS 7 DÍAS (desayuno/media/comida/cena):\n`;
 for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const key=d.toISOString().slice(0,10);const v=diary[key]||{};
-  const vals=MEALS.map(m=>fmt(v[m.id]||0)).join(' / ');
-  txt+=`${d.toLocaleDateString('es-ES')}: ${vals} kcal\n`;}
+const vals=MEALS.map(m=>fmt(v[m.id]||0)).join(' / ');
+txt+=`${d.toLocaleDateString('es-ES')}: ${vals} kcal\n`;}
 return txt;
 }
 function buildHealthReport(){
-let txt=`RE-LATE NUTRICI\u00d3N \u2014 Registro cardiovascular\nGenerado: ${new Date().toLocaleString('es-ES')}\n\nFECHA | TA | PULSO | PESO\n`;
+let txt=`RE-LATE NUTRICIÓN — Registro cardiovascular\nGenerado: ${new Date().toLocaleString('es-ES')}\n\nFECHA | TA | PULSO | PESO\n`;
 vitals.forEach(v=>{txt+=`${new Date(v.date).toLocaleDateString('es-ES')} | ${v.sys?v.sys+'/'+v.dia:'--'} | ${v.pulse||'--'} | ${v.weight||'--'}\n`;});
 if(!vitals.length)txt+='(sin mediciones)\n';
 return txt;
 }
 function downloadTxt(content,name){const blob=new Blob([content],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();}
-$('#exportDownload').onclick=()=>{downloadTxt(buildReport(),'diario-relate-'+todayKey()+'.txt');toast('Descargado \u2B07\uFE0F');};
-$('#exportCopy').onclick=async()=>{try{await navigator.clipboard.writeText(buildReport());toast('Copiado \U0001F4CB');}catch(e){toast('No se pudo copiar');}};
-$('#exportShare').onclick=async()=>{const txt=buildReport();if(navigator.share){try{await navigator.share({title:'Diario Re-Late',text:txt});}catch(e){}}else{try{await navigator.clipboard.writeText(txt);toast('Compartido/copiado \U0001F4F2');}catch(e){toast('No disponible');}}};
-$('#exportHealth').onclick=async()=>{const txt=buildHealthReport();if(navigator.share){try{await navigator.share({title:'Registro cardiovascular',text:txt});}catch(e){}}else{downloadTxt(txt,'salud-relate-'+todayKey()+'.txt');toast('Descargado \u2B07\uFE0F');}};
+$('#exportDownload').onclick=()=>{downloadTxt(buildReport(),'diario-relate-'+todayKey()+'.txt');toast('Descargado ⬇️');};
+$('#exportCopy').onclick=async()=>{try{await navigator.clipboard.writeText(buildReport());toast('Copiado 📋');}catch(e){toast('No se pudo copiar');}};
+$('#exportShare').onclick=async()=>{const txt=buildReport();if(navigator.share){try{await navigator.share({title:'Diario Re-Late',text:txt});}catch(e){}}else{try{await navigator.clipboard.writeText(txt);toast('Compartido/copiado 📲');}catch(e){toast('No disponible');}}};
+$('#exportHealth').onclick=async()=>{const txt=buildHealthReport();if(navigator.share){try{await navigator.share({title:'Registro cardiovascular',text:txt});}catch(e){}}else{downloadTxt(txt,'salud-relate-'+todayKey()+'.txt');toast('Descargado ⬇️');}};
 
 /* ================= RECETAS ================= */
 $('#recipeList').innerHTML=RECIPES.map(r=>`<div class="recipe-card"><h4>${r.t}</h4><p>${r.d}</p></div>`).join('');
@@ -664,14 +664,14 @@ document.querySelectorAll('.tab-btn').forEach(b=>b.onclick=()=>switchTab(b.datas
 /* ================= MODO OSCURO ================= */
 $('#darkToggle').onclick=()=>{
 document.body.classList.toggle('dark');
-$('#darkToggle').textContent=document.body.classList.contains('dark')?'\u2600\uFE0F':'\U0001F319';
+$('#darkToggle').textContent=document.body.classList.contains('dark')?'☀️':'🌙';
 save(); drawCharts();
 };
 
 /* ================= INIT ================= */
 $('#foodSearch').addEventListener('input',renderFoods);
 load();
-$('#darkToggle').textContent=document.body.classList.contains('dark')?'\u2600\uFE0F':'\U0001F319';
+$('#darkToggle').textContent=document.body.classList.contains('dark')?'☀️':'🌙';
 renderChips();renderFoods();renderPrepared();renderMeals();renderDiary();renderVitals();
 </script>
 </body>

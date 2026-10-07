@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a6b4a" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1b14" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Re-Late Nutrición Saludable - PWA para rehabilitación cardíaca">
+<title>Re-Late Nutrición Saludable</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--primary:#1a6b4a;--primary-light:#2d8f6b;--primary-dark:#0f4a33;--accent:#e8f5ee;--danger:#d9534f;--warning:#f0ad4e;--success:#5cb85c;--bg:#f5f7f6;--card:#fff;--text:#2c3e50;--text-light:#7f8c8d;--border:#e0e6e3;--shadow:0 2px 8px rgba(0,0,0,.08);--radius:12px;--header-grad:linear-gradient(135deg,#1a6b4a,#2d8f6b)}
+body.dark{--primary:#3fbf86;--primary-light:#5cd6a0;--primary-dark:#2a9d6a;--accent:#12301f;--bg:#0d1b14;--card:#16281f;--text:#e6ede9;--text-light:#93a89d;--border:#244234;--shadow:0 2px 10px rgba(0,0,0,.4);--header-grad:linear-gradient(135deg,#0f4a33,#1a6b4a)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:76px;transition:background .25s,color .25s}
+.app-header{background:var(--header-grad);color:#fff;padding:14px 20px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between}
+.app-header h1{font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.app-header .subtitle{font-size:.72rem;opacity:.85;margin-top:2px}
+.icon-btn{background:rgba(255,255,255,.15);border:none;color:#fff;width:38px;height:38px;border-radius:10px;font-size:1.15rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.icon-btn:active{transform:scale(.92)}
+.tab-bar{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:6px 0;box-shadow:0 -2px 10px rgba(0,0,0,.12);z-index:100;border-top:1px solid var(--border)}
+.tab-btn{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.6rem;color:var(--text-light);cursor:pointer;padding:5px 4px;border-radius:8px;transition:all .2s;min-width:50px}
+.tab-btn.active{color:var(--primary);background:var(--accent);font-weight:600}
+.tab-btn .tab-icon{font-size:1.25rem}
+.tab-content{display:none;padding:14px;max-width:800px;margin:0 auto;animation:fade .25s}
+.tab-content.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.card h3{font-size:1rem;margin-bottom:8px;color:var(--primary-dark)}
+.search-box{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius);font-size:1rem;outline:none;background:var(--card);color:var(--text)}
+.search-box:focus{border-color:var(--primary)}
+.cat-chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0;scrollbar-width:none}
+.cat-chips::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:.8rem;cursor:pointer;transition:all .2s}
+.chip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.food-list{max-height:420px;overflow-y:auto;margin-top:6px}
+.food-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.food-item:hover{background:var(--accent)}
+.food-item:last-child{border-bottom:none}
+.food-name{font-weight:500;font-size:.9rem;display:flex;align-items:center;gap:6px}
+.food-kcal{font-size:.78rem;color:var(--text-light);text-align:right}
+.traffic{display:inline-block;width:12px;height:12px;border-radius:50%}
+.t-green{background:var(--success)}.t-yellow{background:var(--warning)}.t-red{background:var(--danger)}
+.btn{padding:10px 18px;border:none;border-radius:var(--radius);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:active{background:var(--primary-dark)}
+.btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-block{width:100%;margin-top:8px}
+.meal-section{margin-bottom:16px}
+.meal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.meal-head h4{font-size:.92rem;color:var(--primary-dark)}
+.meal-head .meal-kcal{font-size:.85rem;font-weight:700;color:var(--primary)}
+.meal-plate{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.plate-item{background:var(--accent);padding:12px 10px;border-radius:8px;text-align:center;position:relative}
+.plate-item .remove-btn{position:absolute;top:4px;right:4px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:.75rem;cursor:pointer;line-height:1}
+.plate-item .p-name{font-size:.8rem;font-weight:600}
+.plate-item .p-qty{font-size:.72rem;color:var(--text-light);margin-top:2px}
+.plate-item .p-kcal{font-size:.82rem;color:var(--primary-dark);font-weight:700;margin-top:2px}
+.nutrition-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.nutri-box{text-align:center;padding:10px 4px;background:var(--accent);border-radius:8px}
+.nutri-box .value{font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.nutri-box .label{font-size:.68rem;color:var(--text-light)}
+.progress-wrap{margin-top:12px}
+.progress-bar{height:14px;background:var(--accent);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.progress-fill{height:100%;background:var(--primary);border-radius:10px;transition:width .4s}
+.progress-fill.over{background:var(--danger)}
+.progress-text{font-size:.8rem;color:var(--text-light);margin-top:4px;text-align:center}
+.input-row{display:flex;gap:8px;align-items:center;margin-top:8px}
+.input-row label{font-size:.85rem;min-width:100px}
+.input-row input,.input-row select{flex:1;padding:9px 12px;border:2px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:.9rem}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:200}
+.modal-overlay.show{display:flex}
+.modal{background:var(--card);border-radius:16px 16px 0 0;width:100%;max-width:520px;padding:20px;animation:up .25s;max-height:88vh;overflow-y:auto}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.modal h3{margin-bottom:12px;color:var(--primary-dark)}
+.qty-preview{background:var(--accent);border-radius:8px;padding:12px;text-align:center;margin:12px 0}
+.qty-preview .big{font-size:1.6rem;font-weight:700;color:var(--primary-dark)}
+.meal-chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.meal-chip{padding:10px 4px;border-radius:10px;border:2px solid var(--border);background:var(--card);color:var(--text);font-size:.8rem;cursor:pointer;text-align:center;transition:all .2s}
+.meal-chip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.chart-wrap{display:flex;align-items:flex-end;justify-content:space-between;gap:6px;height:170px;padding:10px 4px 0}
+.chart-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.chart-stack{width:70%;max-width:34px;display:flex;flex-direction:column-reverse;border-radius:6px;overflow:hidden;min-height:3px}
+.seg-break{background:#f0ad4e}.seg-snack{background:#7cb9e8}.seglunch{background:#1a6b4a}.segdinner{background:#2d8f6b}
+body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}body.dark .seglunch{background:#3fbf86}body.dark .segdinner{background:#2a9d6a}
+.chart-val{font-size:.65rem;color:var(--text-light);margin-bottom:3px}
+.chart-day{font-size:.7rem;color:var(--text-light);margin-top:6px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:10px;font-size:.72rem;color:var(--text-light)}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.recipe-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.recipe-card h4{color:var(--primary-dark);font-size:.95rem}
+.recipe-card p{font-size:.8rem;color:var(--text-light);margin-top:4px}
+.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:var(--primary-dark);color:#fff;padding:10px 18px;border-radius:24px;font-size:.85rem;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.muted{font-size:.78rem;color:var(--text-light)}
+/* ---- Salud cardiovascular ---- */
+.vitals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.vital-stat{text-align:center;padding:12px 4px;background:var(--accent);border-radius:10px}
+.vital-stat .v{font-size:1.15rem;font-weight:700;color:var(--primary-dark)}
+.vital-stat .l{font-size:.68rem;color:var(--text-light)}
+.vital-form{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.vital-form input{padding:9px 6px;border:2px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:.85rem;text-align:center;width:100%}
+.vital-form input::placeholder{font-size:.68rem;color:var(--text-light)}
+.bp-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:700;color:#fff}
+.bp-opt{background:var(--success)}.bp-norm{background:#8bc34a}.bp-high{background:var(--warning)}.bp-vhigh{background:var(--danger)}
+.vitals-table{width:100%;border-collapse:collapse;font-size:.78rem;margin-top:8px}
+.vitals-table th,.vitals-table td{padding:7px 4px;text-align:center;border-bottom:1px solid var(--border)}
+.vitals-table th{color:var(--text-light);font-weight:600;font-size:.7rem}
+.linechart{width:100%;height:150px}
+/* ---- Presentación ---- */
+.hero{text-align:center;padding:24px 12px;background:var(--header-grad);border-radius:var(--radius);color:#fff;margin-bottom:14px}
+.hero-logo{font-size:2.2rem;font-weight:800;margin-bottom:6px}
+.hero h2{font-size:1.3rem;margin-bottom:6px}
+.hero .tag{font-size:.8rem;opacity:.9}
+.badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.badge{background:rgba(255,255,255,.2);padding:5px 12px;border-radius:16px;font-size:.72rem}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.feat{background:var(--accent);padding:10px;border-radius:8px;font-size:.78rem;color:var(--text-light);line-height:1.4}
+.feat b{display:block;color:var(--primary-dark);font-size:.82rem;margin-bottom:3px}
+.profile-list{display:flex;flex-wrap:wrap;gap:8px}
+.profile-item{background:var(--accent);padding:8px 12px;border-radius:20px;font-size:.8rem;display:flex;align-items:center;gap:6px}
+.pi{font-size:1rem}
+.evi{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.evi span{background:var(--accent);padding:5px 10px;border-radius:14px;font-size:.72rem}
+.privacy{display:flex;gap:10px;align-items:flex-start;font-size:.82rem;line-height:1.45}
+.app-footer{text-align:center;font-size:.75rem;color:var(--text-light);margin-top:20px;line-height:1.6}
+.app-footer .author{font-weight:600;color:var(--primary)}
+.tab-navigate{background:var(--primary)!important;color:#fff!important;font-weight:700;border-radius:10px;padding:5px 10px}
+.tab-navigate:hover{background:var(--primary-dark)!important}
+</style>
+</head>
+<body>
+<header class="app-header">
+<div>
+  <h1>🫀 Re-Late Nutrición</h1>
+  <div class="subtitle">Saludable · Rehabilitación cardíaca</div>
+</div>
+<button class="icon-btn" id="darkToggle" title="Modo oscuro">🌙</button>
+</header>
+
+<main>
+<!-- ===================== ALIMENTOS ===================== -->
+<section class="tab-content active" id="tab-foods">
+<div class="card">
+  <h3>🔎 Busca o filtra alimentos</h3>
+  <input class="search-box" id="foodSearch" placeholder="Ej: salmón, arroz, manzana...">
+  <div class="cat-chips" id="catChips"></div>
+  <div class="food-list" id="foodList"></div>
+</div>
+</section>
+
+<!-- ===================== PLATOS ===================== -->
+<section class="tab-content" id="tab-plate">
+<div class="card">
+  <h3>🍽️ Tus comidas de hoy</h3>
+  <p class="muted">Toca un alimento en "Alimentos" y elige a qué comida añadirlo.</p>
+  <div id="mealsWrap"></div>
+  <div class="nutrition-summary" id="nutriSummary"></div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+    <div class="progress-text" id="progText">Añade alimentos a tus comidas</div>
+  </div>
+  <button class="btn btn-danger btn-block" id="clearDay">🗑️ Vaciar el día</button>
+</div>
+<div class="card">
+  <h3>🥗 Platos preparados (cardiosaludables)</h3>
+  <div class="food-list" id="preparedList"></div>
+</div>
+</section>
+
+<!-- ===================== DIARIO ===================== -->
+<section class="tab-content" id="tab-diary">
+<div class="card">
+  <h3>🎯 Objetivo diario</h3>
+  <div class="input-row">
+    <label>Kcal objetivo</label>
+    <input type="number" id="goalInput" min="800" max="5000" step="50">
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="dayProgFill" style="width:0%"></div></div>
+    <div class="progress-text" id="dayProgText"></div>
+  </div>
+</div>
+<div class="card">
+  <h3>📈 Historial semanal (kcal por comida)</h3>
+  <div class="chart-wrap" id="weekChart"></div>
+  <div class="legend">
+    <span><i style="background:#f0ad4e"></i>Desayuno</span>
+    <span><i style="background:#7cb9e8"></i>Media</span>
+    <span><i style="background:#1a6b4a"></i>Comida</span>
+    <span><i style="background:#2d8f6b"></i>Cena</span>
+  </div>
+</div>
+<div class="card">
+  <h3>📤 Exportar diario</h3>
+  <p class="muted">Genera un resumen para tu médico o fisioterapeuta.</p>
+  <button class="btn btn-primary btn-block" id="exportDownload">⬇️ Descargar (.txt)</button>
+  <button class="btn btn-outline btn-block" id="exportCopy">📋 Copiar al portapapeles</button>
+  <button class="btn btn-outline btn-block" id="exportShare">📲 Compartir</button>
+</div>
+</section>
+
+<!-- ===================== SALUD ===================== -->
+<section class="tab-content" id="tab-health">
+<div class="card">
+  <h3>❤️ Registro cardiovascular</h3>
+  <p class="muted">Anota tu tensión, pulso y peso. Ideal para el seguimiento en rehabilitación cardíaca.</p>
+  <div class="vitals-grid" id="vitalsStats"></div>
+  <div class="vital-form">
+    <input type="number" id="vSys" placeholder="Sistólica (120)">
+    <input type="number" id="vDia" placeholder="Diastólica (80)">
+    <input type="number" id="vPulse" placeholder="Pulso (70)">
+    <input type="number" id="vWeight" placeholder="Peso kg" step="0.1">
+  </div>
+  <button class="btn btn-primary btn-block" id="vAdd">➕ Registrar medición</button>
+</div>
+<div class="card">
+  <h3>📉 Tensión arterial (últimos 14 días)</h3>
+  <svg class="linechart" id="bpChart" viewBox="0 0 320 150" preserveAspectRatio="none"></svg>
+  <div class="legend">
+    <span><i style="background:#d9534f"></i>Sistólica</span>
+    <span><i style="background:#1a6b4a"></i>Diastólica</span>
+    <span><i style="background:#7cb9e8"></i>Objetivo 120/80</span>
+  </div>
+</div>
+<div class="card">
+  <h3>⚖️ Peso (últimos 14 días)</h3>
+  <svg class="linechart" id="wChart" viewBox="0 0 320 150" preserveAspectRatio="none"></svg>
+</div>
+<div class="card">
+  <h3>📒 Historial de mediciones</h3>
+  <div style="overflow-x:auto"><table class="vitals-table" id="vitalsTable"></table></div>
+  <button class="btn btn-outline btn-block" id="exportHealth">📤 Exportar registro de salud</button>
+</div>
+</section>
+
+<!-- ===================== RECETAS ===================== -->
+<section class="tab-content" id="tab-recipes">
+<div class="card">
+  <h3>👨‍🍳 Recetas cardiosaludables</h3>
+  <div id="recipeList"></div>
+</div>
+</section>
+
+<!-- ===================== PRESENTACIÓN ===================== -->
+<section class="tab-content" id="tab-about">
+<div class="hero">
+<div class="hero-logo">🫀 RL</div>
+<h2>Re-Late Nutrición Saludable</h2>
+<div class="tag">Aplicación PWA de nutrición saludable para rehabilitación cardíaca</div>
+<div class="badges">
+  <span class="badge">📱 PWA</span>
+  <span class="badge">📴 100% Offline</span>
+  <span class="badge">🔒 RGPD</span>
+  <span class="badge">❤️ Salud cardíaca</span>
+</div>
+</div>
+<div class="card">
+<h4>📋 ¿Qué es Re-Late?</h4>
+<p class="muted" style="line-height:1.5">Re-Late es una aplicación web progresiva diseñada para pacientes en rehabilitación cardíaca y personas que buscan una alimentación saludable. Funciona sin conexión y cumple con el RGPD: todos los datos se almacenan únicamente en tu dispositivo.</p>
+</div>
+<div class="card">
+<h4>✨ Características</h4>
+<div class="feat-grid">
+  <div class="feat"><b>🍽️ Alimentos</b>Buscador, cálculo nutricional automático y semáforo cardio.</div>
+  <div class="feat"><b>📷 Recetas</b>Catálogo cardiosaludable con evidencia científica.</div>
+  <div class="feat"><b>📅 Diario</b>Registro de comidas, objetivo calórico e historial semanal.</div>
+  <div class="feat"><b>❤️ Salud</b>Control de tensión, pulso y peso con gráficas.</div>
+</div>
+</div>
+<div class="card">
+<h4>🩺 Perfiles clínicos</h4>
+<p class="muted" style="margin-bottom:8px">Cada perfil ajusta dinámicamente los umbrales del semáforo nutricional:</p>
+<div class="profile-list">
+  <div class="profile-item"><span class="pi">🫀</span>Cardíaco</div>
+  <div class="profile-item"><span class="pi">🩸</span>Hipertenso</div>
+  <div class="profile-item"><span class="pi">📉</span>Dislipidemia</div>
+  <div class="profile-item"><span class="pi">💉</span>Diabetes tipo 1</div>
+  <div class="profile-item"><span class="pi">🍬</span>Diabetes tipo 2</div>
+</div>
+</div>
+<div class="card">
+<h4>🔬 Evidencia científica</h4>
+<p class="muted">Recomendaciones basadas en:</p>
+<div class="evi"><span>PREDIMED</span><span>AHA</span><span>EFSA</span><span>Dieta mediterránea</span></div>
+</div>
+<div class="card">
+<h4>🔒 Privacidad y funcionamiento</h4>
+<div class="privacy" style="margin-bottom:10px"><span class="pi">📴</span><div><b>100% offline:</b> una vez instalada, funciona sin conexión a internet gracias a su service worker.</div></div>
+<div class="privacy"><span class="pi">🛡️</span><div><b>RGPD:</b> no se envían datos a servidores. Todo se guarda localmente en tu dispositivo (localStorage) y puedes exportarlo o borrarlo cuando quieras.</div></div>
+</div>
+<div class="app-footer">
+<div>Re-Late · Nutrición y rehabilitación cardíaca</div>
+<div class="author">Miguel Ángel Layunta López</div>
+<div>© 2026 · Versión PWA 1.0</div>
+</div>
+</section>
+</main>
+
+<nav class="tab-bar">
+<button class="tab-btn active" data-tab="tab-foods"><span class="tab-icon">🥦</span>Alimentos</button>
+<button class="tab-btn" data-tab="tab-plate"><span class="tab-icon">🍽️</span>Comidas</button>
+<button class="tab-btn" data-tab="tab-diary"><span class="tab-icon">📊</span>Diario</button>
+<button class="tab-btn" data-tab="tab-health"><span class="tab-icon">❤️</span>Salud</button>
+<button class="tab-btn" data-tab="tab-recipes"><span class="tab-icon">📖</span>Recetas</button>
+<button class="tab-btn" data-tab="tab-about"><span class="tab-icon">🫀</span>Info</button>
+</nav>
+
+<!-- MODAL RACIÓN -->
+<div class="modal-overlay" id="qtyModal">
+<div class="modal">
+  <h3 id="qtyTitle">Ración</h3>
+  <p class="muted">Elige la comida e indica la cantidad.</p>
+  <div class="meal-chips" id="mealChips"></div>
+  <div class="input-row">
+    <label>Cantidad</label>
+    <input type="number" id="qtyInput" min="1" step="1">
+    <select id="qtyUnit"><option value="g">gramos</option><option value="ud">unidades</option></select>
+  </div>
+  <div class="qty-preview"><div class="big" id="qtyKcal">0 kcal</div><div class="muted" id="qtyMacro"></div></div>
+  <button class="btn btn-primary btn-block" id="qtyAdd">➕ Añadir a la comida</button>
+  <button class="btn btn-outline btn-block" id="qtyCancel">Cancelar</button>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= DATOS ================= */
+const FOODS = [
+ {n:'Brócoli',c:'Verduras',k:34,p:2.8,f:0.4,car:6.6,light:'green',ref:100},
+ {n:'Espinacas',c:'Verduras',k:23,p:2.9,f:0.4,car:3.6,light:'green',ref:100},
+ {n:'Calabacín',c:'Verduras',k:17,p:1.2,f:0.3,car:3.1,light:'green',ref:100},
+ {n:'Tomate',c:'Verduras',k:18,p:0.9,f:0.2,car:3.9,light:'green',ref:100},
+ {n:'Zanahoria',c:'Verduras',k:41,p:0.9,f:0.2,car:9.6,light:'green',ref:100},
+ {n:'Pimiento rojo',c:'Verduras',k:31,p:1.0,f:0.3,car:6.0,light:'green',ref:100},
+ {n:'Judías verdes',c:'Verduras',k:31,p:1.8,f:0.2,car:7.0,light:'green',ref:100},
+ {n:'Lechuga',c:'Verduras',k:15,p:1.4,f:0.2,car:2.9,light:'green',ref:100},
+ {n:'Coliflor',c:'Verduras',k:25,p:1.9,f:0.3,car:5.0,light:'green',ref:100},
+ {n:'Berenjena',c:'Verduras',k:25,p:1.0,f:0.2,car:5.9,light:'green',ref:100},
+ {n:'Manzana',c:'Frutas',k:52,p:0.3,f:0.2,car:14,light:'green',ref:150,unit:'ud'},
+ {n:'Plátano',c:'Frutas',k:89,p:1.1,f:0.3,car:23,light:'yellow',ref:120,unit:'ud'},
+ {n:'Naranja',c:'Frutas',k:47,p:0.9,f:0.1,car:12,light:'green',ref:130,unit:'ud'},
+ {n:'Fresas',c:'Frutas',k:32,p:0.7,f:0.3,car:7.7,light:'green',ref:100},
+ {n:'Arándanos',c:'Frutas',k:57,p:0.7,f:0.3,car:14,light:'green',ref:100},
+ {n:'Kiwi',c:'Frutas',k:61,p:1.1,f:0.5,car:15,light:'green',ref:75,unit:'ud'},
+ {n:'Pera',c:'Frutas',k:57,p:0.4,f:0.1,car:15,light:'green',ref:170,unit:'ud'},
+ {n:'Sandía',c:'Frutas',k:30,p:0.6,f:0.2,car:7.6,light:'green',ref:200},
+ {n:'Uvas',c:'Frutas',k:69,p:0.7,f:0.2,car:18,light:'yellow',ref:100},
+ {n:'Arroz integral',c:'Cereales',k:111,p:2.6,f:0.9,car:23,light:'green',ref:100},
+ {n:'Avena',c:'Cereales',k:379,p:13,f:6.5,car:66,light:'green',ref:40},
+ {n:'Pan integral',c:'Cereales',k:247,p:10,f:3.4,car:41,light:'yellow',ref:40},
+ {n:'Quinoa',c:'Cereales',k:120,p:4.4,f:1.9,car:21,light:'green',ref:100},
+ {n:'Pasta integral',c:'Cereales',k:124,p:5,f:1.1,car:25,light:'yellow',ref:100},
+ {n:'Patata cocida',c:'Cereales',k:87,p:1.9,f:0.1,car:20,light:'yellow',ref:150},
+ {n:'Cuscús',c:'Cereales',k:112,p:3.8,f:0.2,car:23,light:'yellow',ref:100},
+ {n:'Pollo (pechuga)',c:'Proteínas',k:165,p:31,f:3.6,car:0,light:'green',ref:120},
+ {n:'Salmón',c:'Proteínas',k:208,p:20,f:13,car:0,light:'green',ref:120},
+ {n:'Atún fresco',c:'Proteínas',k:144,p:23,f:4.9,car:0,light:'green',ref:120},
+ {n:'Merluza',c:'Proteínas',k:81,p:17,f:0.7,car:0,light:'green',ref:120},
+ {n:'Huevos',c:'Proteínas',k:155,p:13,f:11,car:1.1,light:'yellow',ref:50,unit:'ud'},
+ {n:'Lentejas cocidas',c:'Proteínas',k:116,p:9,f:0.4,car:20,light:'green',ref:150},
+ {n:'Garbanzos cocidos',c:'Proteínas',k:164,p:8.9,f:2.6,car:27,light:'green',ref:150},
+ {n:'Tofu',c:'Proteínas',k:76,p:8,f:4.8,car:1.9,light:'green',ref:100},
+ {n:'Pavo (pechuga)',c:'Proteínas',k:189,p:29,f:7.3,car:0,light:'green',ref:120},
+ {n:'Bacalao',c:'Proteínas',k:82,p:18,f:0.7,car:0,light:'green',ref:120},
+ {n:'Yogur natural',c:'Lácteos',k:61,p:3.5,f:3.3,car:4.7,light:'green',ref:125,unit:'ud'},
+ {n:'Leche desnatada',c:'Lácteos',k:34,p:3.4,f:0.1,car:5,light:'green',ref:200},
+ {n:'Queso fresco',c:'Lácteos',k:174,p:14,f:10,car:3.1,light:'yellow',ref:40},
+ {n:'Queso curado',c:'Lácteos',k:402,p:25,f:33,car:0.5,light:'red',ref:30},
+ {n:'Leche entera',c:'Lácteos',k:61,p:3.2,f:3.3,car:4.8,light:'yellow',ref:200},
+ {n:'Aceite de oliva',c:'Grasas',k:884,p:0,f:100,car:0,light:'yellow',ref:10},
+ {n:'Aguacate',c:'Grasas',k:160,p:2,f:15,car:9,light:'green',ref:100,unit:'ud'},
+ {n:'Nueces',c:'Grasas',k:654,p:15,f:65,car:14,light:'yellow',ref:25},
+ {n:'Almendras',c:'Grasas',k:579,p:21,f:50,car:22,light:'yellow',ref:25},
+ {n:'Semillas de chía',c:'Grasas',k:486,p:17,f:31,car:42,light:'green',ref:15},
+ {n:'Embutido (chorizo)',c:'Procesados',k:455,p:24,f:38,car:1.8,light:'red',ref:50},
+ {n:'Mantequilla',c:'Procesados',k:717,p:0.9,f:81,car:0.1,light:'red',ref:10},
+ {n:'Refresco azucarado',c:'Procesados',k:42,p:0,f:0,car:11,light:'red',ref:330,unit:'ud'},
+ {n:'Bollería industrial',c:'Procesados',k:452,p:6,f:21,car:58,light:'red',ref:60},
+ {n:'Patatas fritas',c:'Procesados',k:542,p:3.4,f:34,car:52,light:'red',ref:50},
+];
+
+const PREPARED = [
+ {n:'Ensalada mediterránea',k:180,p:6,f:8,car:18,light:'green'},
+ {n:'Pollo a la plancha con verduras',k:320,p:34,f:10,car:14,light:'green'},
+ {n:'Salmón al horno con quinoa',k:430,p:32,f:18,car:30,light:'green'},
+ {n:'Lentejas estofadas',k:280,p:18,f:2,car:42,light:'green'},
+ {n:'Pasta integral con tomate',k:350,p:12,f:4,car:62,light:'yellow'},
+ {n:'Hamburguesa de pavo',k:310,p:28,f:14,car:18,light:'yellow'},
+];
+
+const RECIPES = [
+ {t:'Salmón al horno con limón',d:'Salmón 120g, limón, ajo, perejil, 1 cda aceite de oliva. Horno 180°C 15 min. Rico en omega-3.'},
+ {t:'Bowl de quinoa y verduras',d:'Quinoa 60g, brócoli, zanahoria, garbanzos 80g, aceite de oliva. Equilibrio perfecto.'},
+ {t:'Crema de calabacín',d:'Calabacín 200g, puerro, caldo de verduras, 1 cda aceite de oliva. Sin nata, baja en sodio.'},
+ {t:'Pollo mediterráneo',d:'Pechuga 120g, tomate cherry, pimiento, cebolla, hierbas. A la plancha con poco aceite.'},
+ {t:'Porridge de avena y frutos rojos',d:'Avena 40g, leche desnatada 200ml, arándanos 50g. Fibra y antioxidantes.'},
+];
+
+const CATS = ['Todos','Verduras','Frutas','Cereales','Proteínas','Lácteos','Grasas','Procesados'];
+const MEALS = [
+ {id:'breakfast',label:'🌅 Desayuno',cls:'seg-break'},
+ {id:'snack',label:'🥪 Media',cls:'seg-snack'},
+ {id:'lunch',label:'🍽️ Comida',cls:'seglunch'},
+ {id:'dinner',label:'🌙 Cena',cls:'segdinner'},
+];
+
+/* ================= ESTADO ================= */
+let meals = {breakfast:[],snack:[],lunch:[],dinner:[]};
+let activeCat = 'Todos';
+let pendingFood = null;
+let pendingMeal = 'lunch';
+let goal = 2000;
+let diary = {};   // { 'YYYY-MM-DD': {breakfast,snack,lunch,dinner} }
+let vitals = [];  // {date, sys, dia, pulse, weight}
+
+/* ================= HELPERS ================= */
+const $ = s => document.querySelector(s);
+const todayKey = () => new Date().toISOString().slice(0,10);
+const fmt = n => Math.round(n);
+function save(){ localStorage.setItem('relate', JSON.stringify({meals,goal,diary,vitals,dark:document.body.classList.contains('dark')})); }
+function load(){ try{ const d=JSON.parse(localStorage.getItem('relate')||'{}'); if(d.meals)meals=d.meals; if(d.goal)goal=d.goal; if(d.diary)diary=d.diary; if(d.vitals)vitals=d.vitals; if(d.dark)document.body.classList.add('dark'); }catch(e){} }
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); }
+function lightDot(l){ return `<span class="traffic t-${l==='green'?'green':l==='yellow'?'yellow':'red'}"></span>`; }
+function mealTotals(arr){ return arr.reduce((a,b)=>({k:a.k+b.k,p:a.p+b.p,f:a.f+b.f,car:a.car+b.car}),{k:0,p:0,f:0,car:0}); }
+function dayTotals(){ return MEALS.reduce((a,m)=>{const t=mealTotals(meals[m.id]);return{k:a.k+t.k,p:a.p+t.p,f:a.f+t.f,car:a.car+t.car};},{k:0,p:0,f:0,car:0}); }
+function bpClass(sys,dia){ if(sys<120&&dia<80)return['bp-opt','\u00d3ptima']; if(sys<130&&dia<85)return['bp-norm','Normal']; if(sys<140||dia<90)return['bp-high','Elevada']; return['bp-vhigh','Alta']; }
+
+/* ================= RENDER ALIMENTOS ================= */
+function renderChips(){
+$('#catChips').innerHTML = CATS.map(c=>`<button class="chip ${c===activeCat?'active':''}" data-cat="${c}">${c}</button>`).join('');
+document.querySelectorAll('.chip').forEach(ch=>ch.onclick=()=>{activeCat=ch.dataset.cat;renderChips();renderFoods();});
+}
+function renderFoods(){
+const q = $('#foodSearch').value.toLowerCase();
+const list = FOODS.filter(f=>(activeCat==='Todos'||f.c===activeCat)&&f.n.toLowerCase().includes(q));
+$('#foodList').innerHTML = list.length ? list.map(f=>`
+  <div class="food-item" data-n="${f.n}">
+    <span class="food-name">${lightDot(f.light)}${f.n}</span>
+    <span class="food-kcal">${f.k} kcal / ${f.ref}${f.unit==='ud'?' ud':' g'}<br>${f.p}P \u00b7 ${f.f}G \u00b7 ${f.car}C</span>
+  </div>`).join('') : '<p class="muted" style="padding:12px">No se encontraron alimentos.</p>';
+document.querySelectorAll('#foodList .food-item').forEach(el=>el.onclick=()=>openQty(FOODS.find(f=>f.n===el.dataset.n)));
+}
+
+/* ================= MODAL RACIÓN ================= */
+function renderMealChips(){
+$('#mealChips').innerHTML = MEALS.map(m=>`<button class="meal-chip ${m.id===pendingMeal?'active':''}" data-m="${m.id}">${m.label}</button>`).join('');
+document.querySelectorAll('.meal-chip').forEach(ch=>ch.onclick=()=>{pendingMeal=ch.dataset.m;renderMealChips();});
+}
+function openQty(f){
+pendingFood=f;
+$('#qtyTitle').textContent='\U0001F37D\uFE0F '+f.n;
+$('#qtyInput').value=f.ref;
+$('#qtyUnit').value=f.unit||'g';
+$('#qtyUnit').disabled=false; $('#qtyInput').disabled=false;
+renderMealChips();
+updateQtyPreview();
+$('#qtyModal').classList.add('show');
+}
+function updateQtyPreview(){
+if(!pendingFood)return;
+const qty=+$('#qtyInput').value||0, unit=$('#qtyUnit').value;
+const factor = unit==='g' ? qty/pendingFood.ref : qty;
+const k=pendingFood.k*factor, p=pendingFood.p*factor, f2=pendingFood.f*factor, c=pendingFood.car*factor;
+$('#qtyKcal').textContent=fmt(k)+' kcal';
+$('#qtyMacro').textContent=`${fmt(p)} g prote\u00edna \u00b7 ${fmt(f2)} g grasa \u00b7 ${fmt(c)} g hidratos`;
+pendingFood._calc={k,p,f:f2,car:c,qty,unit};
+}
+$('#qtyInput').addEventListener('input',updateQtyPreview);
+$('#qtyUnit').addEventListener('change',updateQtyPreview);
+$('#qtyCancel').onclick=()=>$('#qtyModal').classList.remove('show');
+$('#qtyAdd').onclick=()=>{
+if(!pendingFood||!pendingFood._calc)return;
+const c=pendingFood._calc;
+meals[pendingMeal].push({name:pendingFood.n,k:c.k,p:c.p,f:c.f,car:c.car,qty:c.qty,unit:c.unit});
+save(); renderMeals(); $('#qtyModal').classList.remove('show');
+toast('A\u00f1adido \u2705'); switchTab('tab-plate');
+};
+
+/* ================= COMIDAS ================= */
+function renderMeals(){
+$('#mealsWrap').innerHTML = MEALS.map(m=>{
+  const arr=meals[m.id], t=mealTotals(arr);
+  return `<div class="meal-section">
+    <div class="meal-head"><h4>${m.label}</h4><span class="meal-kcal">${fmt(t.k)} kcal</span></div>
+    <div class="meal-plate">${arr.length?arr.map((it,i)=>`
+      <div class="plate-item">
+        <button class="remove-btn" data-m="${m.id}" data-i="${i}">\u2715</button>
+        <div class="p-name">${it.name}</div>
+        <div class="p-qty">${it.qty}${it.unit}</div>
+        <div class="p-kcal">${fmt(it.k)} kcal</div>
+      </div>`).join(''):'<p class="muted">Sin alimentos.</p>'}</div>
+  </div>`;
+}).join('');
+document.querySelectorAll('.remove-btn').forEach(b=>b.onclick=()=>{meals[b.dataset.m].splice(+b.dataset.i,1);save();renderMeals();});
+const tot=dayTotals();
+$('#nutriSummary').innerHTML=`
+  <div class="nutri-box"><div class="value">${fmt(tot.k)}</div><div class="label">kcal</div></div>
+  <div class="nutri-box"><div class="value">${fmt(tot.p)}</div><div class="label">Prote\u00edna</div></div>
+  <div class="nutri-box"><div class="value">${fmt(tot.f)}</div><div class="label">Grasa</div></div>
+  <div class="nutri-box"><div class="value">${fmt(tot.car)}</div><div class="label">Hidratos</div></div>`;
+const pct=goal?Math.min(tot.k/goal*100,100):0;
+$('#progFill').style.width=pct+'%';
+$('#progFill').classList.toggle('over',tot.k>goal);
+$('#progText').textContent=`${fmt(tot.k)} de ${goal} kcal \u00b7 ${Math.round(tot.k/goal*100)}% del objetivo`;
+const d={}; MEALS.forEach(m=>d[m.id]=mealTotals(meals[m.id]).k);
+diary[todayKey()]=d; save(); renderDiary();
+}
+$('#clearDay').onclick=()=>{meals={breakfast:[],snack:[],lunch:[],dinner:[]};save();renderMeals();toast('D\u00eda vaciado');};
+
+/* ================= PLATOS PREPARADOS ================= */
+function renderPrepared(){
+$('#preparedList').innerHTML=PREPARED.map((p,i)=>`
+  <div class="food-item" data-i="${i}">
+    <span class="food-name">${lightDot(p.light)}${p.n}</span>
+    <span class="food-kcal">${p.k} kcal \u00b7 ${p.p}P \u00b7 ${p.f}G \u00b7 ${p.car}C</span>
+  </div>`).join('');
+document.querySelectorAll('#preparedList .food-item').forEach(el=>el.onclick=()=>{
+  const p=PREPARED[+el.dataset.i];
+  pendingFood={...p,ref:1,unit:'ud',_calc:{k:p.k,p:p.p,f:p.f,car:p.car,qty:1,unit:' raci\u00f3n'}};
+  pendingMeal='lunch';
+  $('#qtyTitle').textContent='\U0001F957 '+p.n;
+  $('#qtyInput').value=1; $('#qtyUnit').value='ud';
+  $('#qtyUnit').disabled=true; $('#qtyInput').disabled=true;
+  $('#qtyKcal').textContent=fmt(p.k)+' kcal';
+  $('#qtyMacro').textContent=`${fmt(p.p)} g prote\u00edna \u00b7 ${fmt(p.f)} g grasa \u00b7 ${fmt(p.car)} g hidratos`;
+  renderMealChips();
+  $('#qtyModal').classList.add('show');
+});
+}
+
+/* ================= DIARIO / OBJETIVO ================= */
+function renderDiary(){
+$('#goalInput').value=goal;
+const today=diary[todayKey()]||{};
+const total=MEALS.reduce((a,m)=>a+(today[m.id]||0),0);
+const pct=goal?Math.min(total/goal*100,100):0;
+$('#dayProgFill').style.width=pct+'%';
+$('#dayProgFill').classList.toggle('over',total>goal);
+$('#dayProgText').textContent=`Hoy: ${fmt(total)} kcal de ${goal} (${Math.round(total/goal*100)}%)`;
+const days=[];
+for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const key=d.toISOString().slice(0,10);
+  days.push({key,lbl:['D','L','M','X','J','V','S'][d.getDay()],val:diary[key]||{},today:i===0});}
+const max=Math.max(goal,...days.map(d=>MEALS.reduce((a,m)=>a+(d.val[m.id]||0),0)),1);
+$('#weekChart').innerHTML=days.map(d=>{
+  const t=MEALS.reduce((a,m)=>a+(d.val[m.id]||0),0);
+  return `<div class="chart-col">
+    <div class="chart-val">${t?fmt(t):''}</div>
+    <div class="chart-stack" style="height:${Math.max(t/max*100,2)}%">
+      ${MEALS.map(m=>`<div class="${m.cls}" style="height:${t?(d.val[m.id]||0)/t*100:0}%"></div>`).join('')}
+    </div>
+    <div class="chart-day">${d.lbl}</div>
+  </div>`;}).join('');
+}
+$('#goalInput').addEventListener('change',e=>{goal=+e.target.value||2000;save();renderMeals();renderDiary();});
+
+/* ================= SALUD CARDIOVASCULAR ================= */
+function renderVitals(){
+const last=vitals[vitals.length-1];
+const wArr=vitals.filter(v=>v.weight);
+const lastW=wArr[wArr.length-1];
+const firstW=wArr[0];
+const diff=lastW&&firstW?(lastW.weight-firstW.weight):null;
+let stats=`
+  <div class="vital-stat"><div class="v">${last&&last.sys?last.sys+'/'+last.dia:'--'}</div><div class="l">\u00daltima TA</div></div>
+  <div class="vital-stat"><div class="v">${last&&last.pulse?last.pulse:'--'}</div><div class="l">Pulso lpm</div></div>
+  <div class="vital-stat"><div class="v">${lastW?lastW.weight:'--'}</div><div class="l">Peso kg${diff!=null?' ('+(diff>0?'+':'')+diff.toFixed(1)+')':''}</div></div>`;
+$('#vitalsStats').innerHTML=stats;
+// tabla (\u00faltimas 10)
+const rows=[...vitals].reverse().slice(0,10).map(v=>{
+  const bc=v.sys?bpClass(v.sys,v.dia):null;
+  return `<tr>
+    <td>${new Date(v.date).toLocaleDateString('es-ES')}</td>
+    <td>${v.sys?v.sys+'/'+v.dia:'--'}${bc?' <span class="bp-badge '+bc[0]+'">'+bc[1]+'</span>':''}</td>
+    <td>${v.pulse||'--'}</td>
+    <td>${v.weight||'--'}</td>
+  </tr>`;}).join('');
+$('#vitalsTable').innerHTML=`<tr><th>Fecha</th><th>TA</th><th>Pulso</th><th>Peso</th></tr>`+(rows||'<tr><td colspan="4" class="muted">Sin mediciones todav\u00eda</td></tr>');
+drawCharts();
+}
+function vAdd(){
+const sys=+$('#vSys').value||null, dia=+$('#vDia').value||null, pulse=+$('#vPulse').value||null, weight=+$('#vWeight').value||null;
+if(!sys&&!pulse&&!weight){toast('Introduce alg\u00fan dato');return;}
+vitals.push({date:new Date().toISOString(),sys,dia,pulse,weight});
+save(); renderVitals();
+$('#vSys').value=$('#vDia').value=$('#vPulse').value=$('#vWeight').value='';
+toast('Medici\u00f3n registrada \u2764\uFE0F');
+}
+$('#vAdd').onclick=vAdd;
+
+function lineChart(svgId,data,series,colors,min,max){
+const svg=document.getElementById(svgId);
+const W=320,H=150,P=14;
+if(!data.length){svg.innerHTML=`<text x="160" y="75" text-anchor="middle" font-size="11" fill="var(--text-light)">Sin datos suficientes</text>`;return;}
+const vals=data.flatMap(d=>series.map(s=>d[s]));
+const lo=Math.min(...vals,min??Infinity), hi=Math.max(...vals,max??-Infinity);
+const range=(hi-lo)||1;
+const x=i=>P+i*(W-2*P)/Math.max(data.length-1,1);
+const y=v=>H-P-(v-lo)/range*(H-2*P);
+let out='';
+// rejilla + objetivo
+if(svgId==='bpChart'){[80,120].forEach((g,gi)=>{out+=`<line x1="${P}" y1="${y(g)}" x2="${W-P}" y2="${y(g)}" stroke="#7cb9e8" stroke-width="1" stroke-dasharray="4 3" opacity=".6"/>`;});}
+series.forEach((s,si)=>{
+  const pts=data.map((d,i)=>`${x(i)},${y(d[s])}`).join(' ');
+  out+=`<polyline points="${pts}" fill="none" stroke="${colors[si]}" stroke-width="2.5" stroke-linejoin="round"/>`;
+  data.forEach((d,i)=>{out+=`<circle cx="${x(i)}" cy="${y(d[s])}" r="3" fill="${colors[si]}"/>`;});
+});
+svg.innerHTML=out;
+}
+function drawCharts(){
+const recent=vitals.slice(-14);
+const bp=recent.filter(v=>v.sys);
+lineChart('bpChart',bp,['sys','dia'],['#d9534f','#1a6b4a']);
+const w=recent.filter(v=>v.weight);
+lineChart('wChart',w,['weight'],['#2d8f6b']);
+}
+
+/* ================= EXPORTAR ================= */
+function buildReport(){
+const tot=dayTotals();
+let txt=`RE-LATE NUTRICI\u00d3N \u2014 Diario de ${new Date().toLocaleDateString('es-ES')}\nObjetivo: ${goal} kcal\n\n`;
+MEALS.forEach(m=>{
+  const t=mealTotals(meals[m.id]);
+  txt+=`${m.label} (${fmt(t.k)} kcal):\n`;
+  if(meals[m.id].length) meals[m.id].forEach(it=>txt+=`  \u2022 ${it.name} (${it.qty}${it.unit}) \u2014 ${fmt(it.k)} kcal\n`);
+  else txt+='  (sin registros)\n';
+  txt+='\n';
+});
+txt+=`TOTAL DEL D\u00cdA: ${fmt(tot.k)} kcal | P ${fmt(tot.p)}g | G ${fmt(tot.f)}g | HC ${fmt(tot.car)}g\n`;
+txt+=`Progreso: ${Math.round(tot.k/goal*100)}% del objetivo\n\n\u00dALTIMOS 7 D\u00cdAS (desayuno/media/comida/cena):\n`;
+for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const key=d.toISOString().slice(0,10);const v=diary[key]||{};
+  const vals=MEALS.map(m=>fmt(v[m.id]||0)).join(' / ');
+  txt+=`${d.toLocaleDateString('es-ES')}: ${vals} kcal\n`;}
+return txt;
+}
+function buildHealthReport(){
+let txt=`RE-LATE NUTRICI\u00d3N \u2014 Registro cardiovascular\nGenerado: ${new Date().toLocaleString('es-ES')}\n\nFECHA | TA | PULSO | PESO\n`;
+vitals.forEach(v=>{txt+=`${new Date(v.date).toLocaleDateString('es-ES')} | ${v.sys?v.sys+'/'+v.dia:'--'} | ${v.pulse||'--'} | ${v.weight||'--'}\n`;});
+if(!vitals.length)txt+='(sin mediciones)\n';
+return txt;
+}
+function downloadTxt(content,name){const blob=new Blob([content],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();}
+$('#exportDownload').onclick=()=>{downloadTxt(buildReport(),'diario-relate-'+todayKey()+'.txt');toast('Descargado \u2B07\uFE0F');};
+$('#exportCopy').onclick=async()=>{try{await navigator.clipboard.writeText(buildReport());toast('Copiado \U0001F4CB');}catch(e){toast('No se pudo copiar');}};
+$('#exportShare').onclick=async()=>{const txt=buildReport();if(navigator.share){try{await navigator.share({title:'Diario Re-Late',text:txt});}catch(e){}}else{try{await navigator.clipboard.writeText(txt);toast('Compartido/copiado \U0001F4F2');}catch(e){toast('No disponible');}}};
+$('#exportHealth').onclick=async()=>{const txt=buildHealthReport();if(navigator.share){try{await navigator.share({title:'Registro cardiovascular',text:txt});}catch(e){}}else{downloadTxt(txt,'salud-relate-'+todayKey()+'.txt');toast('Descargado \u2B07\uFE0F');}};
+
+/* ================= RECETAS ================= */
+$('#recipeList').innerHTML=RECIPES.map(r=>`<div class="recipe-card"><h4>${r.t}</h4><p>${r.d}</p></div>`).join('');
+
+/* ================= TABS ================= */
+function switchTab(id){
+document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+$('#'+id).classList.add('active');
+document.querySelector(`.tab-btn[data-tab="${id}"]`).classList.add('active');
+}
+document.querySelectorAll('.tab-btn').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+
+/* ================= MODO OSCURO ================= */
+$('#darkToggle').onclick=()=>{
+document.body.classList.toggle('dark');
+$('#darkToggle').textContent=document.body.classList.contains('dark')?'\u2600\uFE0F':'\U0001F319';
+save(); drawCharts();
+};
+
+/* ================= INIT ================= */
+$('#foodSearch').addEventListener('input',renderFoods);
+load();
+$('#darkToggle').textContent=document.body.classList.contains('dark')?'\u2600\uFE0F':'\U0001F319';
+renderChips();renderFoods();renderPrepared();renderMeals();renderDiary();renderVitals();
+</script>
+</body>
+</html>

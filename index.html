@@ -657,5 +657,27 @@ load();
 $('#darkToggle').textContent=document.body.classList.contains('dark')?'☀️':'🌙';
 renderChips();renderFoods();renderPrepared();renderMeals();renderDiary();renderVitals();
 </script>
+<nav class="tab-bar">
+  <a href="#inicio" class="tab active">
+    <span class="tab-icon">🏠</span>
+    <span class="tab-label">Inicio</span>
+  </a>
+  <a href="#explorar" class="tab">
+    <span class="tab-icon">🔍</span>
+    <span class="tab-label">Explorar</span>
+  </a>
+  <a href="#notificaciones" class="tab">
+    <span class="tab-icon">🔔</span>
+    <span class="tab-label">Notificaciones</span>
+  </a>
+  <a href="#perfil" class="tab">
+    <span class="tab-icon">👤</span>
+    <span class="tab-label">Perfil</span>
+  </a>
+  <a href="#navegar" class="tab tab-navigate">
+    <span class="tab-icon">🧭</span>
+    <span class="tab-label">Navegar</span>
+  </a>
+</nav> 
 </body>
 </html>

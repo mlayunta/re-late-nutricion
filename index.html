@@ -130,6 +130,42 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 .app-footer .author{font-weight:600;color:var(--primary)}
 .tab-navigate{background:var(--primary)!important;color:#fff!important;font-weight:700;border-radius:10px;padding:5px 10px}
 .tab-navigate:hover{background:var(--primary-dark)!important}
+/* ---- Recetario cardiosaludable ---- */
+#recipeSearch{margin-top:8px}
+.rchip{white-space:nowrap;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-size:.8rem;cursor:pointer;transition:all .2s}
+.rchip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.rec-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
+.rec-head{width:100%;display:flex;align-items:center;gap:10px;padding:12px;background:none;border:none;cursor:pointer;text-align:left;color:var(--text);font:inherit}
+.rec-head:hover{background:var(--accent)}
+.rec-emoji{font-size:1.3rem;flex:0 0 auto}
+.rec-tt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.rec-name{font-weight:600;font-size:.9rem;line-height:1.25;color:var(--primary-dark)}
+.rec-meta{font-size:.72rem;color:var(--text-light)}
+.rec-chev{font-size:.65rem;color:var(--text-light)}
+.rec-body{padding:4px 12px 12px;border-top:1px solid var(--border)}
+.rec-tip{background:var(--accent);border-left:3px solid var(--success);padding:8px 10px;border-radius:8px;font-size:.78rem;line-height:1.45;margin:10px 0;color:var(--text)}
+.rec-sec{font-size:.8rem;font-weight:700;color:var(--primary-dark);margin:12px 0 6px}
+.rec-ul,.rec-ol{font-size:.8rem;color:var(--text);line-height:1.5;padding-left:20px;margin:0}
+.rec-ul li,.rec-ol li{margin-bottom:4px}
+.nb-grid{display:flex;flex-wrap:wrap;gap:6px}
+.nb{min-width:74px;padding:6px 8px;border-radius:8px;background:var(--accent);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center}
+.nb-l{font-size:.6rem;font-weight:700;text-transform:uppercase;color:var(--text-light)}
+.nb-v{font-size:.82rem;font-weight:700;color:var(--primary-dark)}
+.nb-warn{background:#fdf3e0;border-color:var(--warning)}
+.nb-warn .nb-l,.nb-warn .nb-v{color:#9a6b12}
+.nb-alert{background:#fbe9e7;border-color:var(--danger)}
+.nb-alert .nb-l,.nb-alert .nb-v{color:#a8322e}
+.rec-alert{margin-top:10px;padding:8px 10px;border-radius:8px;background:#fbe9e7;border:1px solid var(--danger);color:#8c2b27;font-size:.76rem;line-height:1.4}
+.rec-empty{padding:16px;text-align:center;color:var(--text-light);font-size:.85rem}
+.rec-add{width:100%;margin-top:12px;padding:11px;border:none;border-radius:var(--radius);background:var(--primary);color:#fff;font-weight:700;font-size:.88rem;cursor:pointer}
+.rec-add:active{background:var(--primary-dark)}
+.principles{padding-left:18px}
+.principles li{font-size:.8rem;color:var(--text);line-height:1.55;margin-bottom:4px}
+body.dark .nb-warn{background:#3a2f14}
+body.dark .nb-warn .nb-l,body.dark .nb-warn .nb-v{color:#e8b34b}
+body.dark .nb-alert{background:#3a1f1d}
+body.dark .nb-alert .nb-l,body.dark .nb-alert .nb-v{color:#f0a19c}
+body.dark .rec-alert{background:#3a1f1d;color:#f0a19c}
 </style>
 </head>
 <body>
@@ -240,8 +276,22 @@ body.dark .seg-break{background:#e8b34b}body.dark .seg-snack{background:#5b9bd5}
 <!-- ===================== RECETAS ===================== -->
 <section class="tab-content" id="tab-recipes">
 <div class="card">
-<h3>📖 Recetas cardiosaludables</h3>
+<h3>📖 Recetario cardiosaludable</h3>
+<p class="muted">32 recetas mediterráneas (8 desayunos · 8 comidas · 8 cenas · 8 aperitivos). Toca una receta para ver ingredientes, elaboración e índice nutricional por ración.</p>
+<input class="search-box" id="recipeSearch" placeholder="Buscar receta o ingrediente... (ej: avena, salmón, garbanzos)">
+<div class="cat-chips" id="recipeChips"></div>
 <div id="recipeList"></div>
+</div>
+<div class="card">
+<h3>❤️ Principios de la dieta cardiosaludable</h3>
+<ul class="principles">
+<li><b>Grasas:</b> prioriza monoinsaturadas (AOVE, aguacate, frutos secos) y omega-3 (pescado azul 2-3 raciones/semana).</li>
+<li><b>Sodio:</b> &lt;2 g/día (≈5 g de sal); condimenta con especias, hierbas, ajo y limón.</li>
+<li><b>Fibra:</b> ≥25 g/día (cereales integrales, legumbres ≥3 raciones/semana, verdura y fruta).</li>
+<li><b>Proteína:</b> magra y vegetal frente a carnes rojas y ultraprocesados.</li>
+<li><b>Azúcares libres:</b> &lt;10% de la energía diaria (idealmente &lt;5%).</li>
+<li><b>Semáforo:</b> los badges en ámbar/rojo avisan de sodio, azúcares o grasa saturada elevados por ración.</li>
+</ul>
 </div>
 </section>
 
@@ -393,13 +443,48 @@ const PREPARED = [
  {n:'Hamburguesa de pavo',k:310,p:28,f:14,car:18,light:'yellow'},
 ];
 
-const RECIPES = [
- {t:'Salmón al horno con limón',d:'Salmón 120g, limón, ajo, perejil, 1 cda aceite de oliva. Horno 180°C 15 min. Rico en omega-3.'},
- {t:'Bowl de quinoa y verduras',d:'Quinoa 60g, brócoli, zanahoria, garbanzos 80g, aceite de oliva. Equilibrio perfecto.'},
- {t:'Crema de calabacín',d:'Calabacín 200g, puerro, caldo de verduras, 1 cda aceite de oliva. Sin nata, baja en sodio.'},
- {t:'Pollo mediterráneo',d:'Pechuga 120g, tomate cherry, pimiento, cebolla, hierbas. A la plancha con poco aceite.'},
- {t:'Porridge de avena y frutos rojos',d:'Avena 40g, leche desnatada 200ml, arándanos 50g. Fibra y antioxidantes.'},
-];
+const RECIPE_DB = {
+  desayunos: [
+    {"id": "d1", "name": "Porridge de avena con frutos rojos y nueces", "ingredients": ["40 g copos de avena integral", "200 ml leche semidesnatada o bebida de soja sin azúcar", "25 g arándanos + 25 g fresas frescas", "10 g nueces troceadas", "5 g semillas de chía", "½ cdta. canela"], "steps": ["Calentar la leche con la canela en un cazo sin dejar que hierva.", "Añadir la avena y cocer 5-7 minutos removiendo hasta espesar.", "Incorporar las semillas de chía fuera del fuego y dejar reposar 2 minutos.", "Servir en bol y coronar con frutos rojos y nueces."], "nutrition": {"kcal": 364, "protein": 16, "carbs": 46, "sugars": 14, "fat": 14, "satFat": 3, "fiber": 8, "sodium": 91}, "tip": "La avena aporta beta-glucano que ayuda a reducir el colesterol LDL."},
+    {"id": "d2", "name": "Tostada integral de aguacate, huevo poché y tomate", "ingredients": ["1 rebanada (50 g) pan 100% integral de masa madre", "½ aguacate maduro (70 g)", "1 huevo mediano (60 g)", "1 rodaja de tomate con orégano", "1 cdta. AOVE, unas gotas de limón, pimienta negra"], "steps": ["Tostar el pan hasta que quede crujiente.", "Machacar el aguacate con limón y una pizca de pimienta (sin sal).", "Escalfar el huevo en agua con vinagre 3 minutos.", "Montar: aguacate sobre el pan, tomate, huevo poché y un hilo de AOVE."], "nutrition": {"kcal": 374, "protein": 14, "carbs": 30, "sugars": 4, "fat": 23, "satFat": 4, "fiber": 9, "sodium": 318}, "tip": "El aguacate aporta grasas monoinsaturadas protectoras del corazón."},
+    {"id": "d3", "name": "Yogur natural con granola casera y kiwi", "ingredients": ["150 g yogur natural desnatado sin azúcar", "15 g avena + 8 g almendra laminada + 3 g AOVE (granola)", "1 kiwi (80 g) en láminas", "5 g semillas de lino molidas", "Canela al gusto"], "steps": ["Preparar la granola: mezclar avena, almendra, AOVE y canela; hornear 15 min a 170 °C removiendo a media cocción.", "Servir el yogur en vaso, añadir la granola, el kiwi y las semillas de lino."], "nutrition": {"kcal": 274, "protein": 14, "carbs": 31, "sugars": 14, "fat": 11, "satFat": 1, "fiber": 6, "sodium": 79}, "tip": "Las semillas de lino molidas aportan omega-3 vegetal (ALA)."},
+    {"id": "d4", "name": "Batido verde de espinacas, plátano y avena", "ingredients": ["40 g espinacas frescas", "½ plátano maduro (60 g)", "20 g copos de avena", "200 ml bebida de avena sin azúcar", "10 g mantequilla de cacahuete (100% cacahuete)"], "steps": ["Verter el líquido en la batidora, añadir espinacas y triturar hasta homogeneizar.", "Incorporar plátano, avena y mantequilla de cacahuete; batir 40 segundos.", "Servir inmediatamente, sin colar para conservar la fibra."], "nutrition": {"kcal": 295, "protein": 10, "carbs": 46, "sugars": 16, "fat": 10, "satFat": 2, "fiber": 7, "sodium": 114}, "tip": "Las espinacas son ricas en potasio, que ayuda a regular la presión arterial."},
+    {"id": "d5", "name": "Porridge de avena, manzana y nueces", "ingredients": ["40 g copos de avena integral", "200 ml bebida de soja sin azúcar", "80 g manzana en dados", "8 g nueces troceadas", "2 g canela"], "steps": ["Calentar la bebida de soja con la canela.", "Añadir avena y manzana; cocer 5-7 minutos.", "Servir con nueces por encima."], "nutrition": {"kcal": 347, "protein": 15, "carbs": 49, "sugars": 16, "fat": 12, "satFat": 2, "fiber": 9, "sodium": 72}, "tip": "La manzana aporta pectina, fibra soluble que contribuye a reducir el colesterol."},
+    {"id": "d6", "name": "Revuelto de huevos con espinacas y setas", "ingredients": ["2 huevos medianos (120 g)", "60 g espinacas frescas", "50 g champiñones laminados", "5 g AOVE", "3 g ajo", "40 g pan integral de masa madre"], "steps": ["Saltear champiñones y ajo con AOVE 3 minutos.", "Añadir espinacas y cocinar 2 minutos más.", "Batir los huevos y verter sobre las verduras; remover suavemente hasta cuajar.", "Servir con la tostada integral."], "nutrition": {"kcal": 364, "protein": 21, "carbs": 28, "sugars": 5, "fat": 18, "satFat": 5, "fiber": 5, "sodium": 423}, "tip": "Los huevos aportan proteína de alto valor biológico; elige cocciones sin exceso de grasa."},
+    {"id": "d7", "name": "Bowl de yogur griego con fresas y nueces", "ingredients": ["150 g yogur griego desnatado", "80 g fresas en láminas", "10 g nueces troceadas", "5 g semillas de chía", "8 g miel"], "steps": ["Servir el yogur en un cuenco.", "Distribuir las fresas, nueces, chía y un hilo de miel."], "nutrition": {"kcal": 225, "protein": 18, "carbs": 22, "sugars": 17, "fat": 9, "satFat": 1, "fiber": 4, "sodium": 78}, "tip": "El yogur griego desnatado aporta probióticos y calcio con menos grasa saturada."},
+    {"id": "d8", "name": "Porridge de chocolate y plátano", "ingredients": ["40 g copos de avena integral", "150 ml leche semidesnatada", "60 g plátano en rodajas", "5 g cacao puro en polvo", "8 g nueces"], "steps": ["Mezclar avena, leche y cacao en un cazo; cocer 5-7 minutos.", "Servir con plátano y nueces por encima."], "nutrition": {"kcal": 349, "protein": 15, "carbs": 49, "sugars": 15, "fat": 12, "satFat": 3, "fiber": 8, "sodium": 69}, "tip": "El cacao puro es rico en flavonoides antioxidantes beneficiosos para la salud cardiovascular."},
+  ],
+  comidas: [
+    {"id": "c1", "name": "Lentejas estofadas con verduras y especias", "ingredients": ["75 g lentejas pardinas secas", "50 g zanahoria, 50 g pimiento verde, 40 g cebolla, 3 g ajo", "100 g calabaza en dados", "8 g AOVE", "2 g perejil, 5 g limón", "Laurel, pimentón, cominos"], "steps": ["Sofreír cebolla, ajo, zanahoria y pimiento con AOVE (10 min).", "Añadir pimentón y cominos, remover 30 segundos.", "Incorporar lentejas, calabaza, laurel y agua; cocer 30-35 min.", "Rectificar con limón y perejil en lugar de sal."], "nutrition": {"kcal": 415, "protein": 22, "carbs": 64, "sugars": 10, "fat": 9, "satFat": 1, "fiber": 27, "sodium": 63}, "tip": "Las legumbres son la proteína vegetal más cardiosaludable: sin colesterol y con abundante fibra."},
+    {"id": "c2", "name": "Salmón al horno con costra de hierbas y boniato asado", "ingredients": ["130 g filete de salmón", "150 g boniato en rodajas", "5 g AOVE + perejil, eneldo y ajo", "5 g limón, pimienta"], "steps": ["Precalentar el horno a 190 °C. Asar el boniato con AOVE 25 min.", "Untar el salmón con la mezcla de hierbas y AOVE.", "Hornar 12-14 minutos hasta que se deshoje.", "Servir con limón recién exprimido."], "nutrition": {"kcal": 446, "protein": 29, "carbs": 31, "sugars": 10, "fat": 23, "satFat": 5, "fiber": 5, "sodium": 123}, "tip": "El salmón es una de las mejores fuentes de omega-3 (EPA y DHA), que reduce triglicéridos."},
+    {"id": "c3", "name": "Ensalada completa mediterránea de garbanzos", "ingredients": ["120 g garbanzos cocidos", "60 g tomate, 50 g pepino, 20 g cebolla morada", "3 g perejil, 5 g limón", "8 g AOVE", "30 g pan integral"], "steps": ["Escurrir los garbanzos y mezclar con las verduras troceadas.", "Aliñar con AOVE, limón y perejil.", "Servir con la tostada integral de pan."], "nutrition": {"kcal": 370, "protein": 15, "carbs": 52, "sugars": 10, "fat": 12, "satFat": 2, "fiber": 13, "sodium": 150}, "tip": "Los garbanzos aportan fibra soluble y proteína vegetal sin grasa saturada."},
+    {"id": "c4", "name": "Bowl de quinoa con pollo y brócoli", "ingredients": ["150 g quinoa cocida", "100 g pechuga de pollo", "80 g brócoli al vapor", "40 g zanahoria rallada", "6 g AOVE, 5 g limón"], "steps": ["Cocinar la quinoa según instrucciones (12 min).", "Hacer la pechuga a la plancha con un hilo de AOVE.", "Vaporizar el brócoli 5 minutos.", "Montar el bowl y aliñar con AOVE y limón."], "nutrition": {"kcal": 443, "protein": 40, "carbs": 42, "sugars": 5, "fat": 13, "satFat": 2, "fiber": 8, "sodium": 139}, "tip": "La quinoa es un pseudocereal con proteína completa y bajo índice glucémico."},
+    {"id": "c5", "name": "Espaguetis integrales con tomate y albahaca", "ingredients": ["180 g espaguetis integrales cocidos", "100 g tomate triturado", "3 g ajo, 6 g AOVE", "2 g albahaca fresca", "8 g piñones"], "steps": ["Cocer la pasta integral al dente.", "Sofreír ajo con AOVE, añadir tomate y cocinar 10 min.", "Mezclar con la pasta y albahaca.", "Coronar con piñones tostados."], "nutrition": {"kcal": 346, "protein": 10, "carbs": 49, "sugars": 6, "fat": 13, "satFat": 1, "fiber": 9, "sodium": 16}, "tip": "La pasta integral tiene más fibra y menor impacto glucémico que la refinada."},
+    {"id": "c6", "name": "Arroz integral con atún y verduras salteadas", "ingredients": ["150 g arroz integral cocido", "100 g atún fresco", "60 g calabacín, 40 g pimiento verde", "30 g cebolla, 3 g ajo", "6 g AOVE"], "steps": ["Cocer el arroz integral (25-30 min).", "Saltear las verduras con AOVE y ajo.", "Añadir el atún en dados y cocinar 3 minutos.", "Mezclar con el arroz y servir."], "nutrition": {"kcal": 388, "protein": 35, "carbs": 43, "sugars": 5, "fat": 9, "satFat": 1, "fiber": 5, "sodium": 65}, "tip": "El atún fresco es bajo en grasa y rico en selenio y vitamina B12."},
+    {"id": "c7", "name": "Bowl de edamame con arroz integral", "ingredients": ["80 g edamame", "120 g arroz integral cocido", "30 g zanahoria, 50 g calabacín", "5 g AOVE, 2 g ajo", "10 g salsa soja baja en sodio"], "steps": ["Cocer el edamame 5 minutos en agua hirviendo.", "Saltear las verduras con AOVE.", "Montar el bowl con arroz, edamame y verduras.", "Aliñar con salsa soja baja en sodio."], "nutrition": {"kcal": 299, "protein": 14, "carbs": 42, "sugars": 5, "fat": 10, "satFat": 1, "fiber": 8, "sodium": 36}, "tip": "El edamame es una legumbre completa con isoflavonas beneficiosas para la salud cardiovascular."},
+    {"id": "c8", "name": "Curry de tofu con verduras", "ingredients": ["100 g tofu firme", "100 g calabaza, 80 g boniato", "30 g cebolla, 2 g ajo", "6 g AOVE, 3 g curry", "30 g leche de coco ligera"], "steps": ["Cortar el tofu en dados y dorar con AOVE.", "Saltear cebolla y ajo, añadir calabaza y boniato.", "Incorporar curry y leche de coco; cocinar 15 min.", "Añadir el tofu y servir con arroz integral."], "nutrition": {"kcal": 240, "protein": 11, "carbs": 28, "sugars": 10, "fat": 11, "satFat": 2, "fiber": 4, "sodium": 35}, "tip": "El tofu es una proteína vegetal sin colesterol, ideal para sustituir carnes rojas."},
+  ],
+  cenas: [
+    {"id": "n1", "name": "Crema de calabacín y puerro con semillas de sésamo", "ingredients": ["150 g calabacín", "80 g puerro", "50 g patata", "5 g AOVE", "3 g semillas de sésamo", "Caldo de verduras bajo en sodio"], "steps": ["Pochar puerro con AOVE 8 minutos.", "Añadir calabacín y patata en trozos; cubrir con caldo.", "Cocer 20 minutos y triturar.", "Servir con semillas de sésamo tostadas."], "nutrition": {"kcal": 195, "protein": 6, "carbs": 28, "sugars": 8, "fat": 8, "satFat": 1, "fiber": 5, "sodium": 45}, "tip": "Las cremas de verduras son ligeras y favorecen una cena temprana y baja en calorías."},
+    {"id": "n2", "name": "Merluza al vapor con ensalada templada de verduras", "ingredients": ["150 g merluza", "80 g judías verdes", "50 g zanahoria", "40 g tomate cherry", "5 g AOVE", "Zumo de limón"], "steps": ["Vaporizar la merluza 10 minutos.", "Blanchear judías y zanahoria 5 minutos.", "Mezclar con tomates cherry y aliñar con AOVE y limón.", "Servir el pescado sobre la ensalada templada."], "nutrition": {"kcal": 210, "protein": 28, "carbs": 14, "sugars": 6, "fat": 8, "satFat": 1, "fiber": 4, "sodium": 55}, "tip": "La merluza es un pescado blanco bajo en grasa, ideal para cenas ligeras."},
+    {"id": "n3", "name": "Tortilla francesa de champiñones y espinacas", "ingredients": ["2 huevos (120 g)", "60 g champiñones", "40 g espinacas", "3 g AOVE", "1 g ajo", "Pimienta negra"], "steps": ["Saltear champiñones y ajo con AOVE.", "Añadir espinacas y cocinar 2 minutos.", "Batir los huevos y cuajar la tortilla a fuego suave.", "Servir con una ensalada verde."], "nutrition": {"kcal": 225, "protein": 16, "carbs": 5, "sugars": 2, "fat": 16, "satFat": 4, "fiber": 2, "sodium": 120}, "tip": "La tortilla al horno o con poco aceite es una cena proteica y saciante."},
+    {"id": "n4", "name": "Ensalada tibia de bacalao y pimientos", "ingredients": ["120 g bacalao fresco", "80 g pimiento rojo", "50 g cebolla", "5 g AOVE", "1 g pimentón", "Vinagre de Jerez"], "steps": ["Asar pimientos y cebolla con AOVE 20 min.", "Marcar el bacalao a la plancha 3 min por lado.", "Servir sobre las verduras asadas.", "Aliñar con un hilo de vinagre."], "nutrition": {"kcal": 195, "protein": 22, "carbs": 12, "sugars": 6, "fat": 8, "satFat": 1, "fiber": 3, "sodium": 65}, "tip": "El bacalao es bajo en grasa y aporta yodo; combínalo con verduras asadas para una cena completa."},
+    {"id": "n5", "name": "Wok de gambas con brócoli y jengibre", "ingredients": ["120 g gambas peladas", "80 g brócoli", "40 g pimiento rojo", "4 g jengibre fresco", "5 g AOVE", "1 g ajo"], "steps": ["Saltear ajo y jengibre con AOVE 1 minuto.", "Añadir gambas y cocinar 2 minutos.", "Incorporar brócoli y pimiento; saltear 5 minutos.", "Servir caliente."], "nutrition": {"kcal": 185, "protein": 24, "carbs": 8, "sugars": 4, "fat": 7, "satFat": 1, "fiber": 3, "sodium": 140}, "tip": "Las gambas son bajas en grasa y ricas en astaxantina, un antioxidante potente."},
+    {"id": "n6", "name": "Puré de coliflor con salmón ahumado", "ingredients": ["150 g coliflor", "50 g patata", "5 g AOVE", "30 g salmón ahumado", "Nuez moscada", "Perejil"], "steps": ["Cocer coliflor y patata 20 minutos.", "Triturar con AOVE y nuez moscada.", "Servir con el salmón ahumado en tiras y perejil."], "nutrition": {"kcal": 210, "protein": 12, "carbs": 20, "sugars": 5, "fat": 11, "satFat": 2, "fiber": 4, "sodium": 320}, "tip": "El puré de coliflor sustituye al de patata tradicional con menos calorías y más fibra."},
+    {"id": "n7", "name": "Alcachofas salteadas con almejas", "ingredients": ["150 g alcachofas", "80 g almejas", "3 g ajo", "5 g AOVE", "Perejil", "Limón"], "steps": ["Limpiar y cortar las alcachofas en cuartos.", "Saltear con ajo y AOVE 10 minutos.", "Añadir almejas y cocinar hasta que se abran.", "Servir con perejil y limón."], "nutrition": {"kcal": 165, "protein": 14, "carbs": 12, "sugars": 4, "fat": 8, "satFat": 1, "fiber": 5, "sodium": 180}, "tip": "Las alcachofas contienen cinarina, que favorece la digestión de grasas y reduce el colesterol."},
+    {"id": "n8", "name": "Rollitos de berenjena con ricota y tomate", "ingredients": ["150 g berenjena en láminas", "60 g ricota", "40 g tomate triturado", "3 g AOVE", "Albahaca", "Orégano"], "steps": ["Asar láminas de berenjena con AOVE 15 min.", "Extender ricota y enrollar.", "Colocar en fuente con tomate triturado.", "Hornar 10 minutos con orégano."], "nutrition": {"kcal": 195, "protein": 11, "carbs": 10, "sugars": 5, "fat": 13, "satFat": 6, "fiber": 4, "sodium": 95}, "tip": "La berenjena aporta nasunina, un antioxidante que protege las membranas celulares."},
+  ],
+  aperitivos: [
+    {"id": "a1", "name": "Hummus casero con crudités", "ingredients": ["80 g garbanzos cocidos", "10 g tahini", "5 g AOVE", "3 g ajo", "Zumo de limón", "Comino", "50 g zanahoria y pepino en bastones"], "steps": ["Triturar garbanzos con tahini, ajo, limón y comino.", "Añadir AOVE hasta textura cremosa.", "Servir con bastones de verduras crudas."], "nutrition": {"kcal": 195, "protein": 8, "carbs": 18, "sugars": 3, "fat": 11, "satFat": 1, "fiber": 5, "sodium": 95}, "tip": "El hummus es un aperitivo saciante con proteína vegetal y grasas saludables."},
+    {"id": "a2", "name": "Tostadas de aguacate con sésamo", "ingredients": ["40 g pan integral", "35 g aguacate", "2 g semillas de sésamo", "Zumo de limón", "Pimienta negra"], "steps": ["Tostar el pan.", "Machacar aguacate con limón y pimienta.", "Untar sobre la tostada y espolvorear sésamo."], "nutrition": {"kcal": 165, "protein": 4, "carbs": 18, "sugars": 2, "fat": 9, "satFat": 1, "fiber": 5, "sodium": 180}, "tip": "El sésamo aporta calcio y lignanos con efecto antioxidante."},
+    {"id": "a3", "name": "Aceitunas aliñadas con romero", "ingredients": ["30 g aceitunas verdes", "3 g AOVE", "1 g romero", "1 g ajo"], "steps": ["Mezclar aceitunas con AOVE, romero y ajo laminado.", "Dejar marinar 10 minutos.", "Servir como aperitivo."], "nutrition": {"kcal": 155, "protein": 1, "carbs": 3, "sugars": 0, "fat": 15, "satFat": 2, "fiber": 2, "sodium": 480}, "tip": "Las aceitunas son ricas en ácido oleico; controla la cantidad por su contenido en sodio."},
+    {"id": "a4", "name": "Palomitas con levadura nutricional", "ingredients": ["20 g maíz para palomitas", "2 g AOVE", "3 g levadura nutricional", "Pimienta negra"], "steps": ["Hacer palomitas en olla con tapa y mínimo AOVE.", "Espolvorear con levadura nutricional y pimienta.", "Servir inmediatamente."], "nutrition": {"kcal": 110, "protein": 4, "carbs": 16, "sugars": 0, "fat": 4, "satFat": 0.5, "fiber": 3, "sodium": 15}, "tip": "La levadura nutricional aporta vitaminas del grupo B y un sabor umami sin sal."},
+    {"id": "a5", "name": "Rollitos de pepino con salmón ahumado", "ingredients": ["80 g pepino en láminas", "20 g salmón ahumado", "15 g queso fresco batido 0%", "Eneldo", "Limón"], "steps": ["Pelar el pepino en láminas finas con pelador.", "Extender queso fresco y una tira de salmón.", "Enrollar y fijar con palillo.", "Decorar con eneldo y limón."], "nutrition": {"kcal": 85, "protein": 8, "carbs": 3, "sugars": 2, "fat": 5, "satFat": 1, "fiber": 1, "sodium": 280}, "tip": "El pepino aporta hidratación y muy pocas calorías; ideal para aperitivos ligeros."},
+    {"id": "a6", "name": "Mix de frutos secos tostados con especias", "ingredients": ["15 g nueces", "10 g pistachos", "5 g pipas de calabaza", "1 g pimentón", "1 g comino"], "steps": ["Mezclar frutos secos con especias.", "Tostar en sartén seca 3 minutos removiendo.", "Dejar enfriar y servir."], "nutrition": {"kcal": 195, "protein": 6, "carbs": 6, "sugars": 1, "fat": 17, "satFat": 2, "fiber": 3, "sodium": 5}, "tip": "Un puñado (25-30 g) de frutos secos al día reduce el riesgo cardiovascular según estudios PREDIMED."},
+    {"id": "a7", "name": "Guacamole con bastones de verduras", "ingredients": ["50 g aguacate", "20 g tomate", "5 g cebolla", "5 g cilantro", "Zumo de limón", "50 g zanahoria y pepino"], "steps": ["Machacar aguacate con tomate, cebolla y cilantro.", "Añadir limón y pimienta.", "Servir con bastones de verduras crudas."], "nutrition": {"kcal": 135, "protein": 3, "carbs": 10, "sugars": 4, "fat": 9, "satFat": 1, "fiber": 5, "sodium": 25}, "tip": "El aguacate aporta potasio y magnesio, minerales clave para la función cardíaca."},
+    {"id": "a8", "name": "Crostini de tomate cherry y albahaca", "ingredients": ["30 g pan integral", "40 g tomate cherry", "3 g AOVE", "1 g albahaca", "1 g ajo", "Orégano"], "steps": ["Tostar el pan y frotar con ajo.", "Cortar tomates cherry y mezclar con AOVE, albahaca y orégano.", "Colocar sobre las tostadas."], "nutrition": {"kcal": 125, "protein": 3, "carbs": 16, "sugars": 3, "fat": 6, "satFat": 1, "fiber": 3, "sodium": 160}, "tip": "El tomate cherry es rico en licopeno, un antioxidante que protege las arterias."},
+  ],
+};
 
 const CATS = ['Todos','Verduras','Frutas','Cereales','Proteínas','Lácteos','Grasas','Procesados'];
 const MEALS = [
@@ -649,8 +734,100 @@ $('#exportCopy').onclick=async()=>{try{await navigator.clipboard.writeText(build
 $('#exportShare').onclick=async()=>{const txt=buildReport();if(navigator.share){try{await navigator.share({title:'Diario Re-Late',text:txt});}catch(e){}}else{try{await navigator.clipboard.writeText(txt);toast('Compartido/copiado 📲');}catch(e){toast('No disponible');}}};
 $('#exportHealth').onclick=async()=>{const txt=buildHealthReport();if(navigator.share){try{await navigator.share({title:'Registro cardiovascular',text:txt});}catch(e){}}else{downloadTxt(txt,'salud-relate-'+todayKey()+'.txt');toast('Descargado ⬇️');}};
 
-/* ================= RECETAS ================= */
-$('#recipeList').innerHTML=RECIPES.map(r=>`<div class="recipe-card"><h4>${r.t}</h4><p>${r.d}</p></div>`).join('');
+/* ================= RECETARIO CARDIOSALUDABLE (32 recetas) ================= */
+const RECIPE_CATS=[
+ {key:'desayunos',label:'Desayunos',emoji:'☕',meal:'breakfast'},
+ {key:'comidas',label:'Comidas',emoji:'🍽️',meal:'lunch'},
+ {key:'cenas',label:'Cenas',emoji:'🌙',meal:'dinner'},
+ {key:'aperitivos',label:'Aperitivos',emoji:'🥂',meal:'snack'}
+];
+const RECIPE_FLAT=[].concat.apply([],RECIPE_CATS.map(c=>RECIPE_DB[c.key].map(r=>Object.assign({},r,{cat:c.key,meal:c.meal}))));
+const RTH={sodium:{w:250,a:400},sugars:{w:10,a:15},satFat:{w:3,a:5},fiber:{w:5,a:3,inv:1}};
+let recCat='Todas',openRec=null,pendingRecipe=null;
+function recEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function recFlag(k,v){const t=RTH[k];if(!t)return '';if(t.inv)return v<t.a?'nb-alert':(v<t.w?'nb-warn':'');return v>t.a?'nb-alert':(v>t.w?'nb-warn':'');}
+function recRf(x){return (typeof fmt==='function')?fmt(x):Math.round(x);}
+function recBadges(n){
+const rows=[['Energía',n.kcal,' kcal',''],['Proteínas',n.protein,' g',''],['H.C.',n.carbs,' g',''],['Azúcares',n.sugars,' g',recFlag('sugars',n.sugars)],['Grasas',n.fat,' g',''],['Satur.',n.satFat,' g',recFlag('satFat',n.satFat)],['Fibra',n.fiber,' g',recFlag('fiber',n.fiber)],['Sodio',n.sodium,' mg',recFlag('sodium',n.sodium)]];
+return '<div class="nb-grid">'+rows.map(r=>'<div class="nb '+r[3]+'"><span class="nb-l">'+r[0]+'</span><span class="nb-v">'+r[1]+r[2]+'</span></div>').join('')+'</div>';
+}
+function recAlerts(n){
+const a=[];
+if(n.sodium>RTH.sodium.a)a.push('sodio ('+n.sodium+' mg)');
+if(n.sugars>RTH.sugars.a)a.push('azúcares ('+n.sugars+' g)');
+if(n.satFat>RTH.satFat.a)a.push('grasa saturada ('+n.satFat+' g)');
+if(n.fiber<RTH.fiber.a)a.push('poca fibra ('+n.fiber+' g)');
+return a.length?'<div class="rec-alert">⚠️ Vigila por ración: '+a.join(', ')+'. Toma media ración o compensa el resto del día con verdura y legumbre.</div>':'';
+}
+function recCard(r){
+const c=RECIPE_CATS.find(x=>x.key===r.cat);
+const open=openRec===r.id;
+let h='<article class="rec-card'+(open?' open':'')+'">';
+h+='<button class="rec-head" data-toggle="'+r.id+'"><span class="rec-emoji">'+(c?c.emoji:'🍽️')+'</span><span class="rec-tt"><span class="rec-name">'+recEsc(r.name)+'</span><span class="rec-meta">'+r.nutrition.kcal+' kcal · '+r.nutrition.protein+' g prot · '+r.nutrition.fiber+' g fibra · '+r.nutrition.sodium+' mg sodio</span></span><span class="rec-chev">'+(open?'▲':'▼')+'</span></button>';
+if(open){
+h+='<div class="rec-body"><div class="rec-tip">💡 '+recEsc(r.tip)+'</div>';
+h+='<div class="rec-sec">🥗 Ingredientes</div><ul class="rec-ul">'+r.ingredients.map(i=>'<li>'+recEsc(i)+'</li>').join('')+'</ul>';
+h+='<div class="rec-sec">👨‍🍳 Elaboración</div><ol class="rec-ol">'+r.steps.map(s=>'<li>'+recEsc(s)+'</li>').join('')+'</ol>';
+h+='<div class="rec-sec">📊 Nutrientes por ración</div>'+recBadges(r.nutrition)+recAlerts(r.nutrition);
+h+='<button class="rec-add" data-add="'+r.id+'">➕ Añadir a mis comidas</button></div>';
+}
+return h+'</article>';
+}
+function recChips(){
+const ch=[{key:'Todas',label:'Todas',emoji:'📚',n:RECIPE_FLAT.length}].concat(RECIPE_CATS.map(c=>({key:c.key,label:c.label,emoji:c.emoji,n:RECIPE_DB[c.key].length})));
+$('#recipeChips').innerHTML=ch.map(c=>'<button class="rchip'+(c.key===recCat?' active':'')+'" data-rc="'+c.key+'">'+c.emoji+' '+c.label+' · '+c.n+'</button>').join('');
+document.querySelectorAll('#recipeChips .rchip').forEach(b=>b.onclick=()=>{recCat=b.dataset.rc;recChips();recRender();});
+}
+function recFiltered(){
+const q=($('#recipeSearch').value||'').toLowerCase().trim();
+return RECIPE_FLAT.filter(r=>(recCat==='Todas'||r.cat===recCat)&&(!q||r.name.toLowerCase().includes(q)||r.ingredients.some(i=>i.toLowerCase().includes(q))||r.tip.toLowerCase().includes(q)));
+}
+function recRender(){
+const list=recFiltered();
+$('#recipeList').innerHTML=list.length?list.map(recCard).join(''):'<div class="rec-empty">🔍 Sin resultados para "'+recEsc($('#recipeSearch').value)+'". Prueba: avena, salmón, garbanzos…</div>';
+document.querySelectorAll('#recipeList .rec-head').forEach(b=>b.onclick=()=>{openRec=(openRec===b.dataset.toggle)?null:b.dataset.toggle;recRender();});
+document.querySelectorAll('#recipeList .rec-add').forEach(b=>b.onclick=()=>recOpen(RECIPE_FLAT.find(r=>r.id===b.dataset.add)));
+}
+function recQuickAdd(r,rac){
+const n=r.nutrition;
+try{
+if(!meals[r.meal])meals[r.meal]=[];
+meals[r.meal].push({name:r.name,k:n.kcal*rac,p:n.protein*rac,f:n.fat*rac,car:n.carbs*rac,qty:rac,unit:' rac'});
+save();renderMeals();toast('Receta añadida ✅');switchTab('tab-plate');
+}catch(e){toast('No se pudo añadir la receta');}
+}
+function recOpen(r){
+if(!r)return;
+if(!$('#qtyModal')){recQuickAdd(r,1);return;}
+pendingRecipe=r;pendingFood=null;
+$('#qtyTitle').textContent='🍽️ '+r.name;
+$('#qtyInput').value=1;$('#qtyInput').disabled=false;
+$('#qtyUnit').value='ud';$('#qtyUnit').disabled=true;
+pendingMeal=r.meal;
+renderMealChips();recPreview();
+$('#qtyModal').classList.add('show');
+}
+function recPreview(){
+if(!pendingRecipe)return;
+const n=pendingRecipe.nutrition,rac=Math.max(1,Math.round(+$('#qtyInput').value||1));
+$('#qtyKcal').textContent=recRf(n.kcal*rac)+' kcal';
+$('#qtyMacro').textContent=recRf(n.protein*rac)+' g proteína · '+recRf(n.fat*rac)+' g grasa · '+recRf(n.carbs*rac)+' g HC · '+rac+' ración'+(rac>1?'es':'');
+}
+document.addEventListener('DOMContentLoaded',function(){
+const add=$('#qtyAdd'),cancel=$('#qtyCancel'),qi=$('#qtyInput');
+if(add){const o=add.onclick;add.onclick=function(e){
+if(pendingRecipe&&!pendingFood){
+const rac=Math.max(1,Math.round(+$('#qtyInput').value||1));
+recQuickAdd(pendingRecipe,rac);pendingRecipe=null;
+$('#qtyModal').classList.remove('show');return;
+}
+pendingRecipe=null;if(o)o.call(this,e);
+};}
+if(cancel){const o=cancel.onclick;cancel.onclick=function(e){pendingRecipe=null;if(o)o.call(this,e);};}
+if(qi)qi.addEventListener('input',function(){if(pendingRecipe&&!pendingFood)recPreview();});
+});
+$('#recipeSearch').addEventListener('input',recRender);
+recChips();recRender();
 
 /* ================= TABS ================= */
 function switchTab(id){

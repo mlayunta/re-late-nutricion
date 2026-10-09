@@ -1,6 +1,6 @@
 /* ============================================================
-   parche.js — Re-Late: recetas + alimentos combinables
-   y creación de recetas propias (guardadas en el dispositivo).
+   parche.js v2 — Re-Late: recetas + alimentos combinables,
+   recetas propias y PLATOS PREPARADOS ampliados (55 platos).
    USO: guarda este archivo JUNTO a index.html y añade esta
    línea justo antes de </body> en index.html:
    <script src="parche.js"></script>
@@ -34,7 +34,7 @@
   rs.parentNode.insertBefore(btn,rs);
 
   var hint=document.querySelector('#tab-plate .card p.muted');
-  if(hint)hint.textContent='Toca un alimento en "Alimentos" o el botón 📖 Receta de cada comida: todo se combina en el mismo bloque.';
+  if(hint)hint.textContent='Toca un alimento en "Alimentos", un plato preparado o el botón 📖 Receta: todo se combina en el mismo bloque.';
 
   var wrap=document.createElement('div');
   wrap.innerHTML=
@@ -79,7 +79,114 @@
   var REC_MEAL={desayunos:'breakfast',comidas:'lunch',cenas:'dinner',aperitivos:'snack'};
   function getRecipes(){return RECIPE_FLAT.concat(customRecipes.map(function(r){return Object.assign({},r);}));}
 
-  /* ---- Comidas: UN solo bloque con alimentos + recetas ---- */
+  /* ============================================================
+     PLATOS PREPARADOS AMPLIADOS (49 nuevos → 55 en total)
+     Valores por ración: kcal / proteína g / grasa g / HC g
+     Semáforo: green=recomendado, yellow=moderación
+     ============================================================ */
+  var NUEVOS=[
+    /* Desayunos y dulces sanos */
+    {n:'Tostada integral de tomate y AOVE',k:190,p:5,f:10,car:22,light:'green'},
+    {n:'Porridge de avena con fruta',k:310,p:11,f:8,car:46,light:'green'},
+    {n:'Yogur natural con nueces y arándanos',k:175,p:8,f:10,car:14,light:'green'},
+    {n:'Batido de frutas y avena',k:230,p:8,f:5,car:38,light:'green'},
+    {n:'Tortilla francesa de verduras',k:180,p:14,f:12,car:4,light:'green'},
+    {n:'Revuelto de setas y espinacas',k:210,p:16,f:14,car:6,light:'green'},
+    {n:'Yogur griego con semillas y fresas',k:190,p:16,f:6,car:16,light:'green'},
+    {n:'Compota de manzana con canela y nueces',k:140,p:3,f:7,car:18,light:'green'},
+    {n:'Flan de huevo casero sin azúcar',k:160,p:9,f:11,car:6,light:'green'},
+    {n:'Arroz con leche desnatado con canela',k:220,p:9,f:5,car:34,light:'yellow'},
+    /* Legumbres y bowls */
+    {n:'Bowl de quinoa con verduras asadas',k:340,p:12,f:12,car:44,light:'green'},
+    {n:'Garbanzos salteados con espinacas',k:330,p:15,f:8,car:46,light:'green'},
+    {n:'Potaje de judías con calabaza',k:290,p:14,f:4,car:48,light:'green'},
+    {n:'Cocido ligero (garbanzos, verdura y pollo)',k:420,p:32,f:10,car:44,light:'green'},
+    {n:'Arroz integral con verduras y tofu',k:380,p:16,f:10,car:54,light:'green'},
+    {n:'Pasta integral con pesto de almendras',k:390,p:13,f:14,car:52,light:'yellow'},
+    {n:'Cous-cous con legumbres y verduras',k:360,p:15,f:8,car:54,light:'green'},
+    {n:'Lentejas con verduras y cúrcuma',k:300,p:17,f:4,car:46,light:'green'},
+    {n:'Espinacas salteadas con garbanzos',k:290,p:14,f:8,car:40,light:'green'},
+    {n:'Hummus con crudités y pan integral',k:280,p:10,f:12,car:32,light:'green'},
+    /* Cremas y sopas */
+    {n:'Crema de calabacín con jengibre',k:140,p:4,f:7,car:14,light:'green'},
+    {n:'Sopa de miso con tofu',k:95,p:8,f:4,car:6,light:'green'},
+    {n:'Puré de boniato con leche desnatada',k:160,p:5,f:2,car:30,light:'green'},
+    /* Pescados y mariscos */
+    {n:'Salmón a la plancha con ensalada',k:340,p:28,f:18,car:8,light:'green'},
+    {n:'Atún al horno con pimientos',k:250,p:30,f:8,car:10,light:'green'},
+    {n:'Merluza al horno con patata y cebolla',k:280,p:26,f:8,car:26,light:'green'},
+    {n:'Bacalao al horno con tomate',k:240,p:28,f:8,car:10,light:'green'},
+    {n:'Dorada a la espalda con verduras',k:230,p:26,f:9,car:6,light:'green'},
+    {n:'Sardinas a la plancha con pan integral',k:320,p:22,f:18,car:18,light:'green'},
+    {n:'Calamares a la plancha con alioli ligero',k:220,p:24,f:9,car:6,light:'green'},
+    {n:'Gambas al ajilimón',k:150,p:22,f:6,car:2,light:'green'},
+    {n:'Tostada de salmón ahumado con queso batido',k:240,p:20,f:10,car:18,light:'yellow'},
+    /* Aves y carnes magras */
+    {n:'Pollo al horno con boniato',k:350,p:32,f:12,car:26,light:'green'},
+    {n:'Pavo guisado con setas',k:250,p:32,f:8,car:6,light:'green'},
+    {n:'Conejo al romero con verduras',k:230,p:30,f:7,car:8,light:'green'},
+    {n:'Albóndigas de ternera magra en salsa de tomate',k:300,p:28,f:14,car:12,light:'yellow'},
+    {n:'Estofado de ternera magra con verduras',k:340,p:32,f:14,car:16,light:'yellow'},
+    /* Ensaladas completas */
+    {n:'Ensalada de pollo y garbanzos',k:340,p:28,f:12,car:28,light:'green'},
+    {n:'Ensalada templada de lentillas',k:300,p:16,f:8,car:40,light:'green'},
+    {n:'Ensalada de arroz integral con atún',k:360,p:24,f:10,car:46,light:'green'},
+    {n:'Ensalada de quinoa con aguacate',k:330,p:11,f:14,car:38,light:'green'},
+    /* Verduras como plato principal */
+    {n:'Wok de tofu con brócoli',k:250,p:16,f:10,car:20,light:'green'},
+    {n:'Huevos pochados sobre crema de guisantes',k:220,p:15,f:14,car:10,light:'green'},
+    {n:'Pimientos rellenos de atún y arroz integral',k:310,p:22,f:10,car:32,light:'green'},
+    {n:'Berenjena al horno con tomate y orégano',k:160,p:5,f:9,car:14,light:'green'},
+    {n:'Champiñones rellenos de queso fresco',k:170,p:12,f:10,car:6,light:'green'},
+    /* Bocados salados */
+    {n:'Sándwich integral de pavo, aguacate y tomate',k:330,p:22,f:14,car:30,light:'green'},
+    {n:'Wrap integral de pollo y verduras',k:340,p:26,f:12,car:34,light:'green'},
+    {n:'Guacamole con totopos de maíz horneados',k:240,p:5,f:14,car:24,light:'yellow'}
+  ];
+  PREPARED.push.apply(PREPARED,NUEVOS);
+
+  /* ---- Buscador de platos preparados ---- */
+  var prepSearch=document.createElement('input');
+  prepSearch.className='search-box';prepSearch.id='prepSearch';
+  prepSearch.placeholder='Buscar entre los '+PREPARED.length+' platos preparados...';
+  prepSearch.style.marginTop='8px';
+  var pl=document.getElementById('preparedList');
+  pl.parentNode.insertBefore(prepSearch,pl);
+  prepSearch.addEventListener('input',renderPrepList);
+
+  function openPrepared(p){
+    pendingFood=Object.assign({},p,{ref:1,unit:'ud',t:'dish',_calc:{k:p.k,p:p.p,f:p.f,car:p.car,qty:1,unit:' ración'}});
+    pendingMeal='lunch';
+    document.getElementById('qtyTitle').textContent='🥗 '+p.n;
+    document.getElementById('qtyInput').value=1;
+    document.getElementById('qtyUnit').value='ud';
+    document.getElementById('qtyUnit').disabled=true;
+    document.getElementById('qtyInput').disabled=true;
+    document.getElementById('qtyKcal').textContent=fmt(p.k)+' kcal';
+    document.getElementById('qtyMacro').textContent=fmt(p.p)+' g proteína · '+fmt(p.f)+' g grasa · '+fmt(p.car)+' g hidratos';
+    renderMealChips();
+    document.getElementById('qtyModal').classList.add('show');
+  }
+  function renderPrepList(){
+    var q=(document.getElementById('prepSearch').value||'').toLowerCase().trim();
+    var out='';
+    PREPARED.forEach(function(p,i){
+      if(q&&p.n.toLowerCase().indexOf(q)<0)return;
+      out+='<div class="food-item" data-i="'+i+'"><span class="food-name">'+lightDot(p.light)+p.n+'</span>'+
+      '<span class="food-kcal">'+p.k+' kcal · '+p.p+'P · '+p.f+'G · '+p.car+'C</span></div>';
+    });
+    var list=document.getElementById('preparedList');
+    list.innerHTML=out||'<p class="muted" style="padding:12px">Sin resultados.</p>';
+    Array.prototype.forEach.call(list.querySelectorAll('.food-item'),function(el){
+      el.onclick=function(){openPrepared(PREPARED[+el.dataset.i]);};
+    });
+  }
+  renderPrepared=function(){renderPrepList();};
+  Array.prototype.forEach.call(document.querySelectorAll('#tab-plate h3'),function(h){
+    if(h.textContent.indexOf('Platos preparados')>=0)h.textContent='🥗 Platos preparados (cardiosaludables · '+PREPARED.length+')';
+  });
+
+  /* ---- Comidas: UN solo bloque con alimentos + platos + recetas ---- */
   renderMeals=function(){
     document.getElementById('mealsWrap').innerHTML=MEALS.map(function(m){
       var arr=meals[m.id],t=mealTotals(arr);
@@ -242,5 +349,5 @@
   };
 
   /* ---- Refrescar vistas con la nueva lógica ---- */
-  renderMeals();recChips();recRender();
+  renderMeals();recChips();recRender();renderPrepList();
 })();
